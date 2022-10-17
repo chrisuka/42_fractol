@@ -1,5 +1,6 @@
 **
 !.gitignore
+!.gitmodules
 !author
 !Makefile
 
@@ -12,13 +13,6 @@
 !include/
 !include/*.h
 
-#!libft/
-#!libft/src/ft_*.c
-#!libft/libft.h
-#!libft/Makefile
-
-!obj/
-!obj/.gitinclude
-
-#!libft/obj/
-#!libft/obj/.gitinclude
+!libft
+!libft/
+!libft/**
