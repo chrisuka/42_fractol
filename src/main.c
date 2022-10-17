@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/16 20:56:35 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/17 17:11:24 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,14 @@ static inline t_vars	initialize_vars(void)
 	return (v);
 }
 
-static inline t_vars	instantiate_mlx(const char *wname)
+static inline t_vars	instantiate_mlx(char *wname)
 {
 	t_vars	v;
 
 	v = initialize_vars();
 	v.mlxo = mlx_init();
-	v.img.o = mlx_new_image(v.mlxo, WIN_RESX, WIN_RESY, wname);
+	v.mlx_win = mlx_new_window(v.mlxo, WIN_RESX, WIN_RESY, wname);
+	v.img.o = mlx_new_image(v.mlxo, WIN_RESX, WIN_RESY);
 	v.img.addr = mlx_get_data_addr(v.img.o,
 			&v.img.bpp, &v.img.width, &v.img.endian);
 	v.img.bpp /= __CHAR_BIT__;
@@ -52,6 +53,7 @@ int	main(int argc, char **argv)
 {
 	t_vars	v;
 
+	argv = NULL;
 	if (argc != 2)
 		return (print_usage());
 	v = instantiate_mlx("Fract'ol");

@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/16 20:41:16 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/16 20:42:14 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/17 17:12:14 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	on_keydown(int key, void *vars)
 {
 	t_vars	*v;
 
+	key = 0;
 	v = (t_vars *)(vars);
 	return (0);
 }
@@ -47,10 +48,7 @@ int	on_render(void *vars)
 
 	v = (t_vars *)(vars);
 	ft_bset64 (v->img.addr, bgcolor, (WIN_RESX * WIN_RESY) * v->img.bpp);
-	draw_map(&v->img, v->fdf);
-	draw_gui (&v->img);
 	mlx_put_image_to_window (v->mlxo, v->mlx_win, v->img.o, 0, 0);
-	gui_put_text (v);
 	v->frame ++;
 	return (0);
 }
