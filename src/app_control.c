@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/16 20:41:16 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/17 17:12:14 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:33:46 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ void	app_close(t_vars *v, int code)
 	v->mlxo = NULL;
 	v->mlx_win = NULL;
 	exit(code);
+}
+
+int	on_mousemove(int x, int y, t_vars *v)
+{
+	v = NULL;
+	return (0);
 }
 
 int	on_keydown(int key, void *vars)

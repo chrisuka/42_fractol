@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/17 19:03:00 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/17 22:31:06 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_vector2d
 void	app_close(t_vars *v, int code);
 int		on_keydown(int key, void *vars);
 int		on_keyup(int keycode, void *vars);
+int		on_mousemove(int x, int y, t_vars *v);
 int		on_render(void *vars);
 
 /*/ Draw Utilities /////*/
