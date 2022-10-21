@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/17 22:31:06 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/21 21:27:08 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@
 
 # define BIN_NAME	"fractol"
 # define WIN_TITLE	"Fract'ol"
-# define WIN_RESX	1080
-# define WIN_RESY	740
+# define WIN_RESX	1440
+# define WIN_RESY	1080
+
+# define MAX_DEPTH	200
 
 # define XC_EXIT	0
 # define XC_ERROR	1
@@ -28,6 +30,20 @@
 # define ECONTINUE	0
 # define EEXIT		1
 # define EINTERNAL	3
+
+typedef struct s_complex
+{
+	double	x;
+	double	y;
+}	t_cx;
+
+typedef struct s_viewport {
+	double	x;
+	double	y;
+	double	w;
+	double	h;
+	double	zoom;
+}	t_vrect;
 
 typedef struct s_img_data {
 	void	*o;
@@ -41,15 +57,8 @@ typedef struct s_vars_data_container {
 	void	*mlxo;
 	void	*mlx_win;
 	t_img	img;
-
-	size_t	frame;
+	t_vrect	view;
 }	t_vars;
-
-typedef struct s_vector2d
-{
-	int	x;
-	int	y;
-}	t_v2d;
 
 /*/ App Control ////////*/
 
@@ -62,6 +71,10 @@ int		on_render(void *vars);
 /*/ Draw Utilities /////*/
 
 void	set_pixel(t_img *img, int x, int y, unsigned int color);
+
+/*/ Draw Manager ///////*/
+
+void	draw_fractal(t_img *img);
 
 /*/ GUI ////////////////*/
 

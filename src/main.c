@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/17 22:27:41 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/20 22:37:52 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static inline int		print_usage(void)
 {
-	const char	msg[] = "usage:  " BIN_NAME " mandelbrot|julia|sierpinski\n";
+	const char	msg[] = "usage:  " BIN_NAME " mandelbrot|julia|burningship\n";
 
 	write (1, msg, sizeof(msg) - 1);
 	return (XC_ERROR);
@@ -28,7 +28,6 @@ static inline t_vars	initialize_vars(void)
 	v.mlxo = NULL;
 	v.mlx_win = NULL;
 	v.img = (t_img){0};
-	v.frame = 0;
 	return (v);
 }
 

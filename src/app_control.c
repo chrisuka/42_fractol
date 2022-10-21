@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/16 20:41:16 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/17 22:33:46 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/21 17:13:36 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	app_close(t_vars *v, int code)
 
 int	on_mousemove(int x, int y, t_vars *v)
 {
+	x = 0;
+	y = 0;
 	v = NULL;
 	return (0);
 }
@@ -49,12 +51,12 @@ int	on_keyup(int key, void *vars)
 
 int	on_render(void *vars)
 {
-	const uint64_t	bgcolor = (BG_COLOR | BG_COLOR << 32);
+	//const uint64_t	bgcolor = (BG_COLOR | BG_COLOR << 32);
 	t_vars			*v;
 
 	v = (t_vars *)(vars);
-	ft_bset64 (v->img.addr, bgcolor, (WIN_RESX * WIN_RESY) * v->img.bpp);
+	//ft_bset64 (v->img.addr, bgcolor, (WIN_RESX * WIN_RESY) * v->img.bpp);
+	draw_fractal (&v->img);
 	mlx_put_image_to_window (v->mlxo, v->mlx_win, v->img.o, 0, 0);
-	v->frame ++;
 	return (0);
 }
