@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/22 17:15:21 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/23 00:47:30 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,45 +16,68 @@ static inline unsigned int	sample_color(int n)
 {
 	const unsigned int	palette[] = {0x0, 0x000000FF, 0x0000FF00, 0x00FF0000};
 
-	return (palette[ n % (sizeof(palette) / sizeof(int)) ] );
+	return (palette[n % (sizeof(palette) / sizeof(int))]);
 }
 
-static inline t_cx		scale(double x, double y, t_vrect view)
+static inline t_cx	scale(int x, int y, t_vrect view)
 {
-	const double w = ft_min(WIN_RESX, WIN_RESY);
+	const double	w = ft_min(WIN_RESX, WIN_RESY);
 
-	return ((t_cx) {
-		.x = ((double)(x / w) - 0.5L) * 2.0L - 1.5L + view.x,
-		.y = ((double)(y / w) - 0.5L) * 2.0L + view.y});
+	return ((t_cx){
+		.x = ((double)(x / w) - 0.5L) * 2.0L / view.zoom /*- 1.5L*/ + view.x,
+		.y = ((double)(y / w) - 0.5L) * 2.0L / view.zoom + view.y});
 }
 
-static inline int		mandelbrot(int x0, int y0, t_vrect view)
+/* Return a sample indicating whether point c in the complex plane
+ * falls inside the Mandelbrot Set, and how many iterations it took
+ *
+ * z2 n(c) = z2 + c
+ * z = iterating complex function, using its own xy as input
+ * z2 = z squared
+ * c = complex constant, gets added to z every iteration
+*/
+static inline int	mandelbrot(t_cx c)
 {
-	t_cx	p0 = scale ((double)(x0), (double)(y0), view);
-	double	x;
-	double	y;
-	double	x2;
-	double	y2;
+	t_cx	z;
+	t_cx	z2;
+	t_cx	old;
+	int		period;
 	int		n;
 
-	x = 0.0L;
-	y = 0.0L;
-	x2 = 0.0L;
-	y2 = 0.0L;
+	z = (t_cx){0.0L, 0.0L};
+	z2 = (t_cx){0.0L, 0.0L};
+	period = 0;
 	n = -1;
-	while (++n < MAX_DEPTH && x2 + y2 <= 4.0L)
+	while (++n < MAX_DEPTH && z2.x + z2.y <= 4.0L)
 	{
-		y = 2 * x * y + p0.y;
-		x = x2 - y2 + p0.x;
-		x2 = x * x;
-		y2 = y * y;
+		z.y = 2 * z.x * z.y + c.y;
+		z.x = z2.x - z2.y + c.x;
+		z2.x = (z.x * z.x);
+		z2.y = (z.y * z.y);
+		if (z2.x == old.x && z2.y == old.y)
+			return (sample_color(0));
+		period ++;
+		if (period > PERIOD)
+		{
+			old = z2;
+			period = 0;
+		}
 	}
 	return (sample_color(n));
 }
 
 void	draw_fractal(t_img *img, t_vrect view)
 {
-	for (int x = 0; x < WIN_RESX; x ++)
-		for (int y = 0; y < WIN_RESY; y ++)
-			set_pixel (img, x, y, mandelbrot(x, y, view));
+	int	x;
+	int	y;
+	int	n;
+
+	n = -1;
+	y = -1;
+	while (++y < WIN_RESY)
+	{
+		x = -1;
+		while (++x < WIN_RESX)
+			buf_pixel (img, ++n, mandelbrot(scale(x, y, view)));
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/16 20:41:16 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/22 17:20:47 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/23 00:50:02 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,11 @@ int	on_keydown(int key, void *vars)
 	t_vars	*v;
 
 	v = (t_vars *)(vars);
-	v->view.x += ((key == ARROW_RIGHT) - (key == ARROW_LEFT));
-	v->view.y -= ((key == ARROW_UP) - (key == ARROW_DOWN));
+	v->view.x += ((key == ARROW_RIGHT) - (key == ARROW_LEFT)) * 0.25L;
+	v->view.y -= ((key == ARROW_UP) - (key == ARROW_DOWN)) * 0.25L;
+	v->view.zoom *= 1 + ((key == KB_I) - (key == KB_O)) * 0.2f;
+	if (v->view.zoom < 1.0L)
+		v->view.zoom = 1.0L;
 	return (0);
 }
 

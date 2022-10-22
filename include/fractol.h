@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/22 17:15:35 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/23 00:40:19 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,15 @@
 # define WIN_RESX	1080
 # define WIN_RESY	640
 
-# define MAX_DEPTH	200
+# define MAX_DEPTH	100
+# define PERIOD		10
 
 # define XC_EXIT	0
 # define XC_ERROR	1
 
 # define ECONTINUE	0
 # define EEXIT		1
-# define EINTERNAL	3
+# define EINTERNAL	2
 
 typedef struct s_complex
 {
@@ -69,16 +70,10 @@ int		on_render(void *vars);
 /*/ Draw Utilities /////*/
 
 void	set_pixel(t_img *img, int x, int y, unsigned int color);
+void	buf_pixel(t_img *img, int n, unsigned int color);
 
 /*/ Draw Manager ///////*/
 
 void	draw_fractal(t_img *img, t_vrect view);
-
-/*/ GUI ////////////////*/
-
-/*/ Error //////////////*/
-
-int		perr_badmap(char *fname);
-int		perr_internal(void);
 
 #endif
