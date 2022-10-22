@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/21 22:00:55 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/22 17:15:21 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,26 @@ static inline unsigned int	sample_color(int n)
 	return (palette[ n % (sizeof(palette) / sizeof(int)) ] );
 }
 
-static inline t_cx		scale(double x, double y)
+static inline t_cx		scale(double x, double y, t_vrect view)
 {
-	const double	w = WIN_RESX > WIN_RESY ? WIN_RESX : WIN_RESY;
-	t_cx	c;
+	const double w = ft_min(WIN_RESX, WIN_RESY);
 
-	c.x = (x / w - 0.5L) * 2.0L;
-	c.y = (y / w - 0.5L) * 2.0L;
-	return (c);
+	return ((t_cx) {
+		.x = ((double)(x / w) - 0.5L) * 2.0L - 1.5L + view.x,
+		.y = ((double)(y / w) - 0.5L) * 2.0L + view.y});
 }
 
-static inline int		mandelbrot(int x0, int y0)
+static inline int		mandelbrot(int x0, int y0, t_vrect view)
 {
-	t_cx	p0 = scale ((double)(x0), (double)(y0));
+	t_cx	p0 = scale ((double)(x0), (double)(y0), view);
 	double	x;
 	double	y;
 	double	x2;
 	double	y2;
 	int		n;
 
-	x = p0.x;
-	y = p0.y;
+	x = 0.0L;
+	y = 0.0L;
 	x2 = 0.0L;
 	y2 = 0.0L;
 	n = -1;
@@ -53,9 +52,9 @@ static inline int		mandelbrot(int x0, int y0)
 	return (sample_color(n));
 }
 
-void	draw_fractal(t_img *img)
+void	draw_fractal(t_img *img, t_vrect view)
 {
 	for (int x = 0; x < WIN_RESX; x ++)
 		for (int y = 0; y < WIN_RESY; y ++)
-			set_pixel (img, x, y, mandelbrot(x, y));
+			set_pixel (img, x, y, mandelbrot(x, y, view));
 }

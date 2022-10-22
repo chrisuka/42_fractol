@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/21 21:27:08 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/22 17:15:35 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 # define BIN_NAME	"fractol"
 # define WIN_TITLE	"Fract'ol"
-# define WIN_RESX	1440
-# define WIN_RESY	1080
+# define WIN_RESX	1080
+# define WIN_RESY	640
 
 # define MAX_DEPTH	200
 
@@ -40,8 +40,6 @@ typedef struct s_complex
 typedef struct s_viewport {
 	double	x;
 	double	y;
-	double	w;
-	double	h;
 	double	zoom;
 }	t_vrect;
 
@@ -74,7 +72,7 @@ void	set_pixel(t_img *img, int x, int y, unsigned int color);
 
 /*/ Draw Manager ///////*/
 
-void	draw_fractal(t_img *img);
+void	draw_fractal(t_img *img, t_vrect view);
 
 /*/ GUI ////////////////*/
 
