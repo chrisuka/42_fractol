@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/23 00:47:30 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:18:32 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ static inline t_cx	scale(int x, int y, t_vrect view)
 	const double	w = ft_min(WIN_RESX, WIN_RESY);
 
 	return ((t_cx){
-		.x = ((double)(x / w) - 0.5L) * 2.0L / view.zoom /*- 1.5L*/ + view.x,
-		.y = ((double)(y / w) - 0.5L) * 2.0L / view.zoom + view.y});
+		.x = ((double)(x / w) - 0.5L) * 2.0L * view.zoom /*- 1.5L */+ view.x,
+		.y = ((double)(y / w) - 0.5L) * 2.0L * view.zoom + view.y});
 }
 
 /* Return a sample indicating whether point c in the complex plane
- * falls inside the Mandelbrot Set, and how many iterations it took
+ * falls inside the Mandelbrot Set, namely how many iterations it took
  *
- * z2 n(c) = z2 + c
+ * Escape time algorithm: z2 n(c) = z2 + c
  * z = iterating complex function, using its own xy as input
  * z2 = z squared
  * c = complex constant, gets added to z every iteration

@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/22 17:20:20 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/23 19:15:53 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ static inline t_vars	initialize_vars(void)
 	v.mlxo = NULL;
 	v.mlx_win = NULL;
 	v.img = (t_img){0};
-	v.view = (t_vrect){0};
+	v.view = (t_vrect){.x = 0.0L, .y = 0.0L, .zoom = 1.0L};
+	v.view.cx_input = (t_cx){0.0L, 0.0L};
+	v.dirty = 0;
 	return (v);
 }
 
@@ -49,6 +51,7 @@ static inline t_vars	instantiate_mlx(char *wname)
 static inline void		add_hooks(t_vars *v)
 {
 	mlx_hook (v->mlx_win, ON_MOUSEMOVE, 0, &on_mousemove, v);
+	mlx_hook (v->mlx_win, ON_MOUSEDOWN, 0, &on_mousedown, v);
 	mlx_hook (v->mlx_win, ON_KEYDOWN, 0, &on_keydown, v);
 	mlx_hook (v->mlx_win, ON_KEYUP, 0, &on_keyup, v);
 	mlx_loop_hook (v->mlxo, &on_render, v);
