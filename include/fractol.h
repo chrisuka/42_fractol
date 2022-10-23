@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/23 19:33:47 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/23 20:37:31 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define ZOOM_STEP	0.25L
 
 # define MAX_DEPTH	100
-# define PERIOD		10
+# define PERIOD		20
 
 # define XC_EXIT	0
 # define XC_ERROR	1

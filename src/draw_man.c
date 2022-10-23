@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/23 20:18:32 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/23 21:02:27 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static inline t_cx	scale(int x, int y, t_vrect view)
  * z2 = z squared
  * c = complex constant, gets added to z every iteration
 */
-static inline int	mandelbrot(t_cx c)
+static inline int	mandelbrot(t_cx c, t_cx mc)
 {
 	t_cx	z;
 	t_cx	z2;
@@ -44,10 +44,13 @@ static inline int	mandelbrot(t_cx c)
 	int		period;
 	int		n;
 
-	z = (t_cx){0.0L, 0.0L};
-	z2 = (t_cx){0.0L, 0.0L};
+	//z = (t_cx){0.0L, 0.0L};
+	z = mc;
+	z = mc;
+	z2 = (t_cx){mc.x * mc.x, mc.y * mc.y};
 	period = 0;
 	n = -1;
+	//while (++n < MAX_DEPTH && z2.x + z2.y <= 4.0L)
 	while (++n < MAX_DEPTH && z2.x + z2.y <= 4.0L)
 	{
 		z.y = 2 * z.x * z.y + c.y;
@@ -66,6 +69,13 @@ static inline int	mandelbrot(t_cx c)
 	return (sample_color(n));
 }
 
+static t_cx	mouse_scale(t_cx in)
+{
+	in.x = (in.x - WIN_RESX * 0.5L) / 666.0L;
+	in.y = (in.y - WIN_RESX * 0.5L) / 666.0L;
+	return (in);
+}
+
 void	draw_fractal(t_img *img, t_vrect view)
 {
 	int	x;
@@ -78,6 +88,7 @@ void	draw_fractal(t_img *img, t_vrect view)
 	{
 		x = -1;
 		while (++x < WIN_RESX)
-			buf_pixel (img, ++n, mandelbrot(scale(x, y, view)));
+			//buf_pixel (img, ++n, mandelbrot(scale(x, y, view), mouse_scale(view.cx_input)));
+			buf_pixel (img, ++n, mandelbrot(mouse_scale(view.cx_input), scale(x, y, view)));
 	}
 }
