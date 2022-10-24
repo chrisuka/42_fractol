@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/23 20:37:31 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/24 19:08:26 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@
 # define PAN_STEP	0.25L
 # define ZOOM_STEP	0.25L
 
-# define MAX_DEPTH	100
-# define PERIOD		20
+# define MAX_DEPTH		100
+# define PERIOD			20
+# define SUBDIV_DEPTH	8;
+# define SUBD_RES		4;
 
 # define XC_EXIT	0
 # define XC_ERROR	1
@@ -48,6 +50,13 @@ typedef struct s_viewport {
 	double	zoom;
 	t_cx	cx_input;
 }	t_vrect;
+
+typedef struct s_rectangle_bounds {
+	int	x;
+	int	y;
+	int	w;
+	int	h;
+}	t_rect;
 
 typedef struct s_img_data {
 	void	*o;
@@ -85,6 +94,7 @@ void	buf_pixel(t_img *img, int n, unsigned int color);
 
 /*/ Draw Manager ///////*/
 
+//void	draw_fractal(t_img *img, t_vrect view, t_rect b);
 void	draw_fractal(t_img *img, t_vrect view);
 
 #endif

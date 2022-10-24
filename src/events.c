@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/23 19:33:47 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/24 19:47:23 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int	on_keydown(int key, void *vars)
 	t_vars	*v;
 
 	v = (t_vars *)(vars);
-	v->view.x += ((key == ARROW_RIGHT) - (key == ARROW_LEFT)) * PAN_STEP;
-	v->view.y -= ((key == ARROW_UP) - (key == ARROW_DOWN)) * PAN_STEP;
+	v->view.x += ((key == ARROW_RIGHT) - (key == ARROW_LEFT)) * PAN_STEP * v->view.zoom;
+	v->view.y -= ((key == ARROW_UP) - (key == ARROW_DOWN)) * PAN_STEP * v->view.zoom;
 	v->view.zoom *= 1 + ((key == KB_O) - (key == KB_I)) * ZOOM_STEP;
 	if (v->view.zoom > 2.0L || v->view.zoom <= 0.0L)
 		v->view.zoom = 2.0L;
@@ -66,6 +66,7 @@ int	on_render(void *vars)
 	t_vars			*v;
 
 	v = (t_vars *)(vars);
+	//draw_fractal (&v->img, v->view, (t_rect){0, 0, WIN_RESX, WIN_RESY});
 	draw_fractal (&v->img, v->view);
 	mlx_put_image_to_window (v->mlxo, v->mlx_win, v->img.o, 0, 0);
 	v->dirty = 0;
