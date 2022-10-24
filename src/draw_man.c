@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/24 19:47:20 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/25 00:37:50 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,18 @@ static inline unsigned int	sample_color(int n)
 
 static inline t_cx	scale(int x, int y, t_vrect view)
 {
+#if 0
 	const double	w = ft_min(WIN_RESX, WIN_RESY);
-
 	return ((t_cx){
 		.x = ((double)(x / w) - 0.5L) * 2.0L * view.zoom - 0.75L + view.x,
 		.y = ((double)(y / w) - 0.5L) * 2.0L * view.zoom + view.y});
+#else
+	const double	w = ft_min(WIN_RESX, WIN_RESY) * 0.5L;
+
+	return ((t_cx){
+		.x = (double)(x - w) * 0.01L * view.zoom + view.x,
+		.y = (double)(y - w) * 0.01L * view.zoom + view.y});
+#endif
 }
 
 /* Return a sample indicating whether point c in the complex plane
@@ -65,12 +72,12 @@ static inline int	mandelbrot(t_cx c, t_cx z)
 	return (sample_color(n));
 }
 
-#if 1
+#if 0
 static t_cx	mouse_scale(t_cx in)
 {
 # if 1
 	in.x = (in.x - WIN_RESX * 0.5L) * 0.01L;
-	in.y = (in.y - WIN_RESX * 0.5L) * 0.01L;
+	in.y = (in.y - WIN_RESY * 0.5L) * 0.01L;
 # else
 	const double	w = ft_min(WIN_RESX, WIN_RESY);
 
@@ -94,7 +101,9 @@ void	draw_fractal(t_img *img, t_vrect view)
 	{
 		x = -1;
 		while (++x < WIN_RESX)
-			buf_pixel (img, ++n, mandelbrot(mouse_scale(view.cx_input), scale(x, y, view)));
+			buf_pixel (img, ++n, mandelbrot(
+				scale(view.cx_input.x, view.cx_input.y, view),
+				scale(x, y, view)));
 			//buf_pixel (img, ++n, mandelbrot(scale(x, y, view), (t_cx){0.0L, 0.0L}));
 	}
 }
@@ -132,7 +141,7 @@ static void	draw_rect(t_img *img, t_rect b, unsigned int color)
  * the borders calculated earlier.
  *
  * To prevent stack overflow, there is a depth limit after which we
- * use simple xy iteration to sample the remaining area
+ * use simple xy iteration to sample the remaining area.
 */
 void	draw_fractal(t_img *img, t_vrect view, t_rect b, int depth)
 {
@@ -142,23 +151,24 @@ void	draw_fractal(t_img *img, t_vrect view, t_rect b, int depth)
 	int	fst;
 	int	sample_diff = 0;
 
-	if (depth >= SUBIDV_DEPTH || b.w < SUBD_RES || b.h < SUBD_RES)
+	if (depth >= SUBDIV_DEPTH || b.w < SUBD_RES || b.h < SUBD_RES)
 		return (draw_fractal_simple(b));
 	fst = sample_fractal (0, 0);
-	y = b.y;
+	x = b.x - 1;
 	while (++x < b.w)
 	{
 		res = sample_fractal (x, 0);
 		res = sample_fractal (x, b.h - 1);
 		sample_diff |= (res != fst);
 	}
+	y = b.y - 1;
 	while (++y < b.h)
 	{
 		res = sample_fractal (0,       y);
 		res = sample_fractal (b.w - 1, y);
 	}
 	if (!sample_diff)
-		return (draw_rect(img, b, color));
+		return (draw_rect(img, b, res));
 		// b.xy + 1 -> b.wh - 1
 
 	b.w >>= 1;

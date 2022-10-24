@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/23 19:15:53 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/25 00:54:03 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,25 @@ static inline int		print_usage(void)
 	return (XC_ERROR);
 }
 
+static inline void		add_hooks(t_vars *v)
+{
+	mlx_hook (v->mlx_win, ON_MOUSEMOVE, 0, &on_mousemove, v);
+	mlx_hook (v->mlx_win, ON_MOUSEDOWN, 0, &on_mousedown, v);
+	mlx_hook (v->mlx_win, ON_KEYDOWN, 0, &on_keydown, v);
+	mlx_hook (v->mlx_win, ON_KEYUP, 0, &on_keyup, v);
+	mlx_loop_hook (v->mlxo, &on_render, v);
+}
+
 static inline t_vars	initialize_vars(void)
 {
-	t_vars	v;
-
-	v.mlxo = NULL;
-	v.mlx_win = NULL;
-	v.img = (t_img){0};
-	v.view = (t_vrect){.x = 0.0L, .y = 0.0L, .zoom = 1.0L};
-	v.view.cx_input = (t_cx){0.0L, 0.0L};
-	v.dirty = 0;
-	return (v);
+	return ((t_vars){
+	.mlxo = NULL,
+	.mlx_win = NULL,
+	.img = (t_img){.o = NULL, .addr = NULL},
+	.view = (t_vrect){.x = 0.0L, .y = 0.0L, .zoom = 1.0L,
+		.cx_input = (t_cx){0.0L, 0.0L}},
+	.lock_cursor = 0,
+	.dirty = 1});
 }
 
 static inline t_vars	instantiate_mlx(char *wname)
@@ -46,15 +54,6 @@ static inline t_vars	instantiate_mlx(char *wname)
 			&v.img.bpp, &v.img.width, &v.img.endian);
 	v.img.bpp /= __CHAR_BIT__;
 	return (v);
-}
-
-static inline void		add_hooks(t_vars *v)
-{
-	mlx_hook (v->mlx_win, ON_MOUSEMOVE, 0, &on_mousemove, v);
-	mlx_hook (v->mlx_win, ON_MOUSEDOWN, 0, &on_mousedown, v);
-	mlx_hook (v->mlx_win, ON_KEYDOWN, 0, &on_keydown, v);
-	mlx_hook (v->mlx_win, ON_KEYUP, 0, &on_keyup, v);
-	mlx_loop_hook (v->mlxo, &on_render, v);
 }
 
 int	main(int argc, char **argv)

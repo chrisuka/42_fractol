@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/24 19:08:26 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/25 00:46:05 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@
 # define PAN_STEP	0.25L
 # define ZOOM_STEP	0.25L
 
-# define MAX_DEPTH		100
-# define PERIOD			20
-# define SUBDIV_DEPTH	8;
-# define SUBD_RES		4;
+# define MAX_DEPTH		100 // MAX ITERATIONS PER COMPLEX FUNCTION
+# define PERIOD			20 // INTERVAL TO CHECK PERIODICITY
+# define SUBDIV_DEPTH	8; // MAX DEPTH TO RECURSE SUBDIVSIONS
+# define SUBD_RES		4; // IF SUBDIVISION RESOLUTION LESS THAN THIS, GOTO SIMPLE
 
 # define XC_EXIT	0
 # define XC_ERROR	1
@@ -72,6 +72,7 @@ typedef struct s_vars_data_container {
 	t_img	img;
 	t_vrect	view;
 
+	int		lock_cursor;
 	int		dirty;
 }	t_vars;
 
