@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/25 00:37:50 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/25 23:23:19 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,11 @@ static inline unsigned int	sample_color(int n)
 
 static inline t_cx	scale(int x, int y, t_vrect view)
 {
-#if 0
-	const double	w = ft_min(WIN_RESX, WIN_RESY);
-	return ((t_cx){
-		.x = ((double)(x / w) - 0.5L) * 2.0L * view.zoom - 0.75L + view.x,
-		.y = ((double)(y / w) - 0.5L) * 2.0L * view.zoom + view.y});
-#else
 	const double	w = ft_min(WIN_RESX, WIN_RESY) * 0.5L;
 
 	return ((t_cx){
 		.x = (double)(x - w) * 0.01L * view.zoom + view.x,
 		.y = (double)(y - w) * 0.01L * view.zoom + view.y});
-#endif
 }
 
 /* Return a sample indicating whether point c in the complex plane
@@ -43,7 +36,7 @@ static inline t_cx	scale(int x, int y, t_vrect view)
  * z2 = z squared
  * c = complex constant, gets added to z every iteration
 */
-static inline int	mandelbrot(t_cx c, t_cx z)
+static inline int	mandelbrot(t_cx z, t_cx c)
 {
 	t_cx	z2;
 	t_cx	old;
@@ -61,7 +54,7 @@ static inline int	mandelbrot(t_cx c, t_cx z)
 		z2.x = (z.x * z.x);
 		z2.y = (z.y * z.y);
 		if (z2.x == old.x && z2.y == old.y)
-			return (sample_color(0));
+			return (MAX_DEPTH);
 		period ++;
 		if (period > PERIOD)
 		{
@@ -69,7 +62,7 @@ static inline int	mandelbrot(t_cx c, t_cx z)
 			period = 0;
 		}
 	}
-	return (sample_color(n));
+	return (n);
 }
 
 #if 0
@@ -88,7 +81,7 @@ static t_cx	mouse_scale(t_cx in)
 }
 #endif
 
-#if 1
+#if 0
 void	draw_fractal(t_img *img, t_vrect view)
 {
 	int	x;
@@ -101,10 +94,15 @@ void	draw_fractal(t_img *img, t_vrect view)
 	{
 		x = -1;
 		while (++x < WIN_RESX)
+#if 1
 			buf_pixel (img, ++n, mandelbrot(
-				scale(view.cx_input.x, view.cx_input.y, view),
+				scale(x, y, view),
+				scale(view.cx_input.x, view.cx_input.y, view)));
+#else
+			buf_pixel (img, ++n, mandelbrot(
+				(t_cx){0.0L, 0.0L},
 				scale(x, y, view)));
-			//buf_pixel (img, ++n, mandelbrot(scale(x, y, view), (t_cx){0.0L, 0.0L}));
+#endif
 	}
 }
 #else
@@ -119,17 +117,64 @@ static inline t_rect	r_add(t_rect b, int x, int y)
 
 static void	draw_rect(t_img *img, t_rect b, unsigned int color)
 {
-	t_uint64	fc;
-	int			y;
+#if 0
+	const uint64_t	dcolor = ((uint64_t)(color) | (uint64_t)(color) << 32);
+	unsigned int	*pxi;
 
-	fc = (t_uint64)(color | color << 32);
-	pxi = addr + y * WIN_RESX + (b.x + 1) * img->bpp;
-	y = -1;
-	while (++y < b.h)
+	pxi = (unsigned int *)(img->addr + b.y * WIN_RESX + b.x);
+	while (b.y < b.h)
 	{
-		ft_bset64 (pxi, fc, w);
-		pxi += WIN_RESX - w;
+		ft_bset64 (pxi, dcolor, b.w);
+		pxi += WIN_RESX - b.w;
+		b.y ++;
 	}
+#else
+	for (int x = 0; x < b.w; x ++)
+		for (int y = 0; y < b.h; y ++)
+			set_pixel (img, b.x + x, b.y + y, color);
+#endif
+}
+
+void	draw_fractal_simple(t_vars *v, t_rect b)
+{
+	//int	n;
+
+	//n = b.y * WIN_RESX + b.x - 1;
+	b.y = -1;
+	while (++b.y < WIN_RESY)
+	{
+		b.x = -1;
+		while (++b.x < WIN_RESX)
+#if 0
+			buf_pixel (&v->img, ++n, sample_color(mandelbrot(
+				(t_cx){0.0L, 0.0L},
+				scale (b.x, b.y, v->view)
+			)));	
+		n += WIN_RESX - b.w;
+#else
+			set_pixel (&v->img, b.x, b.y, sample_color(mandelbrot(
+				scale(b.x, b.y, v->view),
+				scale(v->view.cx_input.x, v->view.cx_input.y, v->view)
+			)));
+#endif
+	}
+}
+
+static int	sample_fractal(t_vars *v, int x, int y)
+{
+	int	n;
+
+#if 0
+	n = mandelbrot(
+		(t_cx){0.0L, 0.0L},
+		scale(x, y, v->view));
+#else
+	n = mandelbrot(
+		scale(x, y, v->view),
+		scale(v->view.cx_input.x, v->view.cx_input.y, v->view));
+#endif
+	set_pixel (&v->img, x, y, sample_color(n));
+	return (n);
 }
 
 /* Mariani-Silver algorithm
@@ -143,39 +188,40 @@ static void	draw_rect(t_img *img, t_rect b, unsigned int color)
  * To prevent stack overflow, there is a depth limit after which we
  * use simple xy iteration to sample the remaining area.
 */
-void	draw_fractal(t_img *img, t_vrect view, t_rect b, int depth)
+void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b, int mask)
+//void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b)
 {
-	int	x;
-	int	y;
-	int	res;
-	int	fst;
-	int	sample_diff = 0;
+	int	sample_diff;
+	int	n;
 
-	if (depth >= SUBDIV_DEPTH || b.w < SUBD_RES || b.h < SUBD_RES)
-		return (draw_fractal_simple(b));
-	fst = sample_fractal (0, 0);
-	x = b.x - 1;
-	while (++x < b.w)
-	{
-		res = sample_fractal (x, 0);
-		res = sample_fractal (x, b.h - 1);
-		sample_diff |= (res != fst);
-	}
-	y = b.y - 1;
-	while (++y < b.h)
-	{
-		res = sample_fractal (0,       y);
-		res = sample_fractal (b.w - 1, y);
-	}
+	if (depth >= SUBDIV_DEPTH || b.w <= SUBD_RES || b.h <= SUBD_RES)
+		return (draw_fractal_simple (v, b));
+	if (base_sample < 0)
+		base_sample = sample_fractal(v, b.x, b.y);
+
+	ft_putstr("depth: ");
+	ft_putnbr(depth);
+	ft_putendl("");
+
+	sample_diff = 0;
+	n = b.x - 1;
+	while (++n < b.x + b.w)
+		sample_diff |= ((mask & 2) == 0 && base_sample != sample_fractal(v, n, 0))
+					| ((mask & 8) == 0 && base_sample != sample_fractal (v, n, b.h - 1));
+	n = b.y - 1;
+	while (++n < b.y + b.h)
+		sample_diff |= ((mask & 1) == 0 && base_sample != sample_fractal(v, 0,       n))
+					| ((mask & 4) == 0 && base_sample != sample_fractal (v, b.w - 1, n));
 	if (!sample_diff)
-		return (draw_rect(img, b, res));
-		// b.xy + 1 -> b.wh - 1
-
+	{
+		ft_putendl("no diff");
+		return (draw_rect(&v->img, b, sample_color(base_sample)));
+	}
 	b.w >>= 1;
 	b.h >>= 1;
-	draw_fractal (img, view, r_add(b, 0, 0));
-	draw_fractal (img, view, r_add(b, b.w, 0));
-	draw_fractal (img, view, r_add(b, 0, b.h));
-	draw_fractal (img, view, r_add(b, b.w, b.h));
+	draw_fractal (v, -1, depth + 1, r_add(b, 0,   0),  1 | 2);
+	draw_fractal (v, -1, depth + 1, r_add(b, 0, b.h),  1 | 2 | 8);
+	draw_fractal (v, -1, depth + 1, r_add(b, b.w, 0),  1 | 2 | 4);
+	draw_fractal (v, -1, depth + 1, r_add(b, b.w, b.h),1 | 2 | 4 | 8);
 }
 #endif

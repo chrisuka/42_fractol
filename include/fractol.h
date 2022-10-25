@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/25 00:46:05 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/25 22:47:32 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 
 # define BIN_NAME	"fractol"
 # define WIN_TITLE	"Fract'ol"
-# define WIN_RESX	1080
+//# define WIN_RESX	1080
+# define WIN_RESX	640
 # define WIN_RESY	640
 
 # define PAN_STEP	0.25L
@@ -28,8 +29,8 @@
 
 # define MAX_DEPTH		100 // MAX ITERATIONS PER COMPLEX FUNCTION
 # define PERIOD			20 // INTERVAL TO CHECK PERIODICITY
-# define SUBDIV_DEPTH	8; // MAX DEPTH TO RECURSE SUBDIVSIONS
-# define SUBD_RES		4; // IF SUBDIVISION RESOLUTION LESS THAN THIS, GOTO SIMPLE
+# define SUBDIV_DEPTH	8 // MAX DEPTH TO RECURSE SUBDIVSIONS
+# define SUBD_RES		4 // IF SUBDIVISION RESOLUTION LESS THAN THIS, GOTO SIMPLE
 
 # define XC_EXIT	0
 # define XC_ERROR	1
@@ -95,7 +96,8 @@ void	buf_pixel(t_img *img, int n, unsigned int color);
 
 /*/ Draw Manager ///////*/
 
-//void	draw_fractal(t_img *img, t_vrect view, t_rect b);
-void	draw_fractal(t_img *img, t_vrect view);
+void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b, int mask);
+//void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b);
+//void	draw_fractal(t_img *img, t_vrect view);
 
 #endif
