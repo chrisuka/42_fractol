@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/25 22:47:32 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/26 18:28:35 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_viewport {
 	double	x;
 	double	y;
 	double	zoom;
-	t_cx	cx_input;
+	t_cx	mouse_complex;
 }	t_vrect;
 
 typedef struct s_rectangle_bounds {
@@ -57,6 +57,8 @@ typedef struct s_rectangle_bounds {
 	int	y;
 	int	w;
 	int	h;
+	int	side;
+	int	base_n;
 }	t_rect;
 
 typedef struct s_img_data {
@@ -75,6 +77,8 @@ typedef struct s_vars_data_container {
 
 	int		lock_cursor;
 	int		dirty;
+	int		mx_old;
+	int		my_old;
 }	t_vars;
 
 /*/ App Control ////////*/
@@ -96,8 +100,10 @@ void	buf_pixel(t_img *img, int n, unsigned int color);
 
 /*/ Draw Manager ///////*/
 
-void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b, int mask);
-//void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b);
-//void	draw_fractal(t_img *img, t_vrect view);
+#  if 0
+void	draw_fractal(t_vars *v, int depth, t_rect b, int mask);
+#  else
+void	draw_fractal(t_img *img, t_vrect view);
+#  endif
 
 #endif

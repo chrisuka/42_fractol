@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/25 23:23:19 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/10/26 18:19:22 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,7 @@ static inline int	mandelbrot(t_cx z, t_cx c)
 	return (n);
 }
 
-#if 0
-static t_cx	mouse_scale(t_cx in)
-{
-# if 1
-	in.x = (in.x - WIN_RESX * 0.5L) * 0.01L;
-	in.y = (in.y - WIN_RESY * 0.5L) * 0.01L;
-# else
-	const double	w = ft_min(WIN_RESX, WIN_RESY);
-
-	in.x = ((double)(in.x / w) - 0.5L) * 2.0L;
-	in.y = ((double)(in.y / w) - 0.5L) * 2.0L;
-# endif
-	return (in);
-}
-#endif
-
-#if 0
+#if 1
 void	draw_fractal(t_img *img, t_vrect view)
 {
 	int	x;
@@ -95,9 +79,9 @@ void	draw_fractal(t_img *img, t_vrect view)
 		x = -1;
 		while (++x < WIN_RESX)
 #if 1
-			buf_pixel (img, ++n, mandelbrot(
+			buf_pixel (img, ++n, sample_color(mandelbrot(
 				scale(x, y, view),
-				scale(view.cx_input.x, view.cx_input.y, view)));
+				view.mouse_complex)));
 #else
 			buf_pixel (img, ++n, mandelbrot(
 				(t_cx){0.0L, 0.0L},
@@ -106,13 +90,22 @@ void	draw_fractal(t_img *img, t_vrect view)
 	}
 }
 #else
-static inline t_rect	r_add(t_rect b, int x, int y)
+static inline t_rect	r_split(t_rect b, int is_vertical)
 {
-	return ((t_rect){
-		.x = b.x + x,
-		.y = b.y + y,
+	if (is_vertical)
+		return ((t_rect){
+		.x = b.x + b.w * !b.side,
+		.y = b.y,
+		.w = b.w >> 1,
+		.h = b.h,
+		.base_n = b.base_n});
+	else
+		return ((t_rect){
+		.x = b.x,
+		.y = b.y + b.h * !b.side,
 		.w = b.w,
-		.h = b.h});
+		.h = b.h >> 1,
+		.base_n = b.base_n});
 }
 
 static void	draw_rect(t_img *img, t_rect b, unsigned int color)
@@ -154,7 +147,7 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 #else
 			set_pixel (&v->img, b.x, b.y, sample_color(mandelbrot(
 				scale(b.x, b.y, v->view),
-				scale(v->view.cx_input.x, v->view.cx_input.y, v->view)
+				v->view.mouse_complex
 			)));
 #endif
 	}
@@ -171,7 +164,7 @@ static int	sample_fractal(t_vars *v, int x, int y)
 #else
 	n = mandelbrot(
 		scale(x, y, v->view),
-		scale(v->view.cx_input.x, v->view.cx_input.y, v->view));
+		v->view.mouse_complex);
 #endif
 	set_pixel (&v->img, x, y, sample_color(n));
 	return (n);
@@ -188,7 +181,7 @@ static int	sample_fractal(t_vars *v, int x, int y)
  * To prevent stack overflow, there is a depth limit after which we
  * use simple xy iteration to sample the remaining area.
 */
-void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b, int mask)
+void	draw_fractal(t_vars *v, int depth, t_rect b, int mask)
 //void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b)
 {
 	int	sample_diff;
@@ -196,32 +189,35 @@ void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b, int mask)
 
 	if (depth >= SUBDIV_DEPTH || b.w <= SUBD_RES || b.h <= SUBD_RES)
 		return (draw_fractal_simple (v, b));
-	if (base_sample < 0)
-		base_sample = sample_fractal(v, b.x, b.y);
+	if (b.base_n < 0)
+		b.base_n = sample_fractal (v, b.x + (b.w >> 1), b.y + (b.h >> 1));
 
+	/*
 	ft_putstr("depth: ");
 	ft_putnbr(depth);
-	ft_putendl("");
+	ft_putendl("");*/
 
 	sample_diff = 0;
 	n = b.x - 1;
+	if ( CURRENT SUBDIVISION IS VERTICAL)
+	{
 	while (++n < b.x + b.w)
-		sample_diff |= ((mask & 2) == 0 && base_sample != sample_fractal(v, n, 0))
-					| ((mask & 8) == 0 && base_sample != sample_fractal (v, n, b.h - 1));
+		sample_diff |= (b.side == 0 && b.base_n != sample_fractal(v, n, 0))
+					| (b.side == 1 && b.base_n != sample_fractal (v, n, b.h - 1));
+	}
+	else
+	{
 	n = b.y - 1;
 	while (++n < b.y + b.h)
-		sample_diff |= ((mask & 1) == 0 && base_sample != sample_fractal(v, 0,       n))
-					| ((mask & 4) == 0 && base_sample != sample_fractal (v, b.w - 1, n));
+		sample_diff |= ((mask & 1) == 0 && b.base_n != sample_fractal(v, 0,       n))
+					| ((mask & 4) == 0 && b.base_n != sample_fractal (v, b.w - 1, n));
+	}
 	if (!sample_diff)
 	{
 		ft_putendl("no diff");
-		return (draw_rect(&v->img, b, sample_color(base_sample)));
+		return (draw_rect(&v->img, b, sample_color(b.base_n)));
 	}
-	b.w >>= 1;
-	b.h >>= 1;
-	draw_fractal (v, -1, depth + 1, r_add(b, 0,   0),  1 | 2);
-	draw_fractal (v, -1, depth + 1, r_add(b, 0, b.h),  1 | 2 | 8);
-	draw_fractal (v, -1, depth + 1, r_add(b, b.w, 0),  1 | 2 | 4);
-	draw_fractal (v, -1, depth + 1, r_add(b, b.w, b.h),1 | 2 | 4 | 8);
+	draw_fractal (v, depth + 1, r_split(b, 1), b.side);
+	draw_fractal (v, depth + 1, r_split(b, 0), b.side);
 }
 #endif
