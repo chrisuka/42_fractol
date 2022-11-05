@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/26 18:38:21 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/04 18:22:01 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ int	on_keydown(int key, void *vars)
 {
 	t_vars	*v;
 
-	if (key == KB_ESC)
-		return (0);
 	v = (t_vars *)(vars);
 	v->view.x += ((key == ARROW_RIGHT) - (key == ARROW_LEFT)) * PAN_STEP * v->view.zoom;
 	v->view.y -= ((key == ARROW_UP) - (key == ARROW_DOWN)) * PAN_STEP * v->view.zoom;
@@ -62,6 +60,11 @@ int	on_keydown(int key, void *vars)
 	if (v->view.zoom > 2.0L || v->view.zoom <= 0.0L)
 		v->view.zoom = 2.0L;
 	v->dirty = 1;
+	if (key == KB_ESC)
+	{
+		v->dirty = 0;
+		return (0);
+	}
 	return (0);
 }
 
@@ -72,6 +75,9 @@ int	on_keyup(int key, void *vars)
 	v = (t_vars *)(vars);
 	if (key == KB_ESC)
 		app_close (v, XC_EXIT);
+	if (key == KB_R)
+		v->view = (t_vrect){.x = 0.0L, .y = 0.0L,
+			.zoom = 1.0L, .mouse_complex = (t_cx){0.0L, 0.0L}};
 	return (0);
 }
 
@@ -85,15 +91,14 @@ int	on_render(void *vars)
 	if (!v->dirty)
 		return (0);
 	v->dirty = 0;
-#if 0
-	raw_fractal (v, 0, (t_rect){0,  0,  hw, hh}, 0);
-	draw_fractal (v, 0, (t_rect){0,  hh, hw, hh}, 0);
-	draw_fractal (v, 0, (t_rect){hw, hh, hw, hh}, 0);
-	draw_fractal (v, 0, (t_rect){hw, 0,  hw, hh}, 0);
-#else
-	//draw_fractal (v, 0, (t_rect){0, 0, WIN_RESX, WIN_RESY, 0, -1}, 0);
-#endif
-	draw_fractal (&v->img, v->view);
+
+	
+	if (v->view.zoom >= 0.5L)
+		draw_fractal_simple (v, (t_rect){0, 0, WIN_RESX, WIN_RESY});
+	else
+		draw_fractal (v, 0, (t_rect){0, 0, WIN_RESX, WIN_RESY});
+	render_colors (&v->img, (t_rect){0, 0, WIN_RESX, WIN_RESY});
+
 	mlx_put_image_to_window (v->mlxo, v->mlx_win, v->img.o, 0, 0);
 	return (0);
 }

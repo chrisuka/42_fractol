@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/26 18:28:35 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/04 20:00:20 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,15 @@
 
 # define BIN_NAME	"fractol"
 # define WIN_TITLE	"Fract'ol"
-//# define WIN_RESX	1080
 # define WIN_RESX	640
 # define WIN_RESY	640
 
 # define PAN_STEP	0.25L
 # define ZOOM_STEP	0.25L
 
-# define MAX_DEPTH		100 // MAX ITERATIONS PER COMPLEX FUNCTION
+# define MAX_DEPTH		40 // MAX ITERATIONS PER COMPLEX FUNCTION
 # define PERIOD			20 // INTERVAL TO CHECK PERIODICITY
-# define SUBDIV_DEPTH	8 // MAX DEPTH TO RECURSE SUBDIVSIONS
+# define SUBDIV_DEPTH	12 // MAX DEPTH TO RECURSE SUBDIVSIONS
 # define SUBD_RES		4 // IF SUBDIVISION RESOLUTION LESS THAN THIS, GOTO SIMPLE
 
 # define XC_EXIT	0
@@ -57,8 +56,6 @@ typedef struct s_rectangle_bounds {
 	int	y;
 	int	w;
 	int	h;
-	int	side;
-	int	base_n;
 }	t_rect;
 
 typedef struct s_img_data {
@@ -76,7 +73,7 @@ typedef struct s_vars_data_container {
 	t_vrect	view;
 
 	int		lock_cursor;
-	int		dirty;
+	int		dirty : 1;
 	int		mx_old;
 	int		my_old;
 }	t_vars;
@@ -100,8 +97,10 @@ void	buf_pixel(t_img *img, int n, unsigned int color);
 
 /*/ Draw Manager ///////*/
 
-#  if 0
-void	draw_fractal(t_vars *v, int depth, t_rect b, int mask);
+#  if 1
+void	draw_fractal_simple(t_vars *v, t_rect b);
+void	draw_fractal(t_vars *v, int depth, t_rect b);
+void	render_colors(t_img *img, t_rect b);
 #  else
 void	draw_fractal(t_img *img, t_vrect view);
 #  endif

@@ -6,26 +6,39 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/26 18:19:22 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/05 17:04:05 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
+
+
 static inline unsigned int	sample_color(int n)
 {
+#if 0
 	const unsigned int	palette[] = {0x0, 0x000000FF, 0x0000FF00, 0x00FF0000};
 
 	return (palette[n % (sizeof(palette) / sizeof(int))]);
+#else
+		return (
+# if 1
+			(n * 5 | (n * 10) << 8 | (n * 20) << 16)
+# else
+			(n * 20)
+# endif
+			& 0x00FFFFFF);
+#endif
 }
 
 static inline t_cx	scale(int x, int y, t_vrect view)
 {
 	const double	w = ft_min(WIN_RESX, WIN_RESY) * 0.5L;
+	const double	amp = 0.01L;
 
 	return ((t_cx){
-		.x = (double)(x - w) * 0.01L * view.zoom + view.x,
-		.y = (double)(y - w) * 0.01L * view.zoom + view.y});
+		.x = (double)(x - w) * amp * view.zoom + view.x,
+		.y = (double)(y - w) * amp * view.zoom + view.y});
 }
 
 /* Return a sample indicating whether point c in the complex plane
@@ -65,56 +78,13 @@ static inline int	mandelbrot(t_cx z, t_cx c)
 	return (n);
 }
 
-#if 1
-void	draw_fractal(t_img *img, t_vrect view)
-{
-	int	x;
-	int	y;
-	int	n;
-
-	n = -1;
-	y = -1;
-	while (++y < WIN_RESY)
-	{
-		x = -1;
-		while (++x < WIN_RESX)
-#if 1
-			buf_pixel (img, ++n, sample_color(mandelbrot(
-				scale(x, y, view),
-				view.mouse_complex)));
-#else
-			buf_pixel (img, ++n, mandelbrot(
-				(t_cx){0.0L, 0.0L},
-				scale(x, y, view)));
-#endif
-	}
-}
-#else
-static inline t_rect	r_split(t_rect b, int is_vertical)
-{
-	if (is_vertical)
-		return ((t_rect){
-		.x = b.x + b.w * !b.side,
-		.y = b.y,
-		.w = b.w >> 1,
-		.h = b.h,
-		.base_n = b.base_n});
-	else
-		return ((t_rect){
-		.x = b.x,
-		.y = b.y + b.h * !b.side,
-		.w = b.w,
-		.h = b.h >> 1,
-		.base_n = b.base_n});
-}
-
 static void	draw_rect(t_img *img, t_rect b, unsigned int color)
 {
-#if 0
+#if 1
 	const uint64_t	dcolor = ((uint64_t)(color) | (uint64_t)(color) << 32);
 	unsigned int	*pxi;
 
-	pxi = (unsigned int *)(img->addr + b.y * WIN_RESX + b.x);
+	pxi = (((unsigned int *)(img->addr)) + b.y * WIN_RESX + b.x);
 	while (b.y < b.h)
 	{
 		ft_bset64 (pxi, dcolor, b.w);
@@ -126,31 +96,6 @@ static void	draw_rect(t_img *img, t_rect b, unsigned int color)
 		for (int y = 0; y < b.h; y ++)
 			set_pixel (img, b.x + x, b.y + y, color);
 #endif
-}
-
-void	draw_fractal_simple(t_vars *v, t_rect b)
-{
-	//int	n;
-
-	//n = b.y * WIN_RESX + b.x - 1;
-	b.y = -1;
-	while (++b.y < WIN_RESY)
-	{
-		b.x = -1;
-		while (++b.x < WIN_RESX)
-#if 0
-			buf_pixel (&v->img, ++n, sample_color(mandelbrot(
-				(t_cx){0.0L, 0.0L},
-				scale (b.x, b.y, v->view)
-			)));	
-		n += WIN_RESX - b.w;
-#else
-			set_pixel (&v->img, b.x, b.y, sample_color(mandelbrot(
-				scale(b.x, b.y, v->view),
-				v->view.mouse_complex
-			)));
-#endif
-	}
 }
 
 static int	sample_fractal(t_vars *v, int x, int y)
@@ -166,14 +111,120 @@ static int	sample_fractal(t_vars *v, int x, int y)
 		scale(x, y, v->view),
 		v->view.mouse_complex);
 #endif
-	set_pixel (&v->img, x, y, sample_color(n));
+	set_pixel (&v->img, x, y, (unsigned int)(n));
 	return (n);
 }
 
-/* Mariani-Silver algorithm
- * Only sample the border pixels of the screen. If all samples are the same,
- * Simply fill the box with that color. Otherwise, subdivide the screen into
- * 4 smaller rects, and recursively scan the subdivisions.
+static inline int	get_sample(t_img *img, int x, int y)
+{
+	unsigned int	*pxi;
+
+	pxi = (unsigned int *)(img->addr);
+	pxi += y * WIN_RESX + x;
+	return (*pxi);
+}
+
+static void	sample_border(t_vars *v, t_rect b)
+{
+	const int	ex = b.x + b.w - 1;
+	const int	ey = b.y + b.h - 1;
+	const int	w1 = (b.w == 1);
+	const int	h1 = (b.h == 1);
+	int			n;
+
+	n = b.x - 1;
+	while (++n <= ex)
+	{
+		sample_fractal (v, n, b.y);
+		if (!h1)
+			sample_fractal (v, n, ey);
+	}
+	n = b.y;
+	while (++n < ey)
+	{
+		sample_fractal (v, b.x, n);
+		if (!w1)
+			sample_fractal (v, ex, n);
+	}
+}
+
+static inline int	check_match_bounds(t_img *img, t_rect b, int base_n)
+{
+	const int	ex = b.x + b.w - 1;
+	const int	ey = b.y + b.h - 1;
+	int			n;
+
+	n = b.x - 1;
+	while (++n <= ex)
+	{
+		if ((base_n != get_sample (img, n, b.y))
+		||  (base_n != get_sample (img, n, ey)))
+			return (0);
+	}
+	n = b.y;
+	while (++n < ey)
+	{
+		if ((base_n != get_sample (img, b.x, n))
+		||  (base_n != get_sample (img, ex, n)))
+			return (0);
+	}
+	return (1);
+}
+
+void	render_colors(t_img *img, t_rect b)
+{
+	const int	ex = b.x + b.w;
+	const int	ey = b.y + b.h;
+	int	x;
+	int	y;
+
+	x = b.x - 1;
+	while (++x < ex)
+	{
+		y = b.y - 1;
+		while (++y < ey)
+#if 0
+			buf_pixel (img, ++n, sample_color(
+				get_sample (img, x, y)));
+#else
+		set_pixel (img, x, y,
+			sample_color(
+			get_sample (img, x, y)));
+#endif
+		//n += WIN_RESX;
+	}
+}
+
+void	draw_fractal_simple(t_vars *v, t_rect b)
+{
+	const int	ex = b.x + b.w - 1;
+	const int	ey = b.y + b.h - 1;
+	int			x;
+	int			y;
+	//int			n;
+
+	//n = b.y * WIN_RESX + b.x - 1;
+	y = b.y - 1;
+	while (++y <= ey)
+	{
+		x = b.x - 1;
+		while (++x <= ex)
+#if 0
+			buf_pixel (&v->img, ++n, sample_color(mandelbrot(
+				(t_cx){0.0L, 0.0L},
+				scale (b.x, b.y, v->view)
+			)));	
+		n += WIN_RESX - b.w;
+#else
+		sample_fractal (v, x, y);
+#endif
+	}
+}
+
+/* Mariani-Silver algorithm (DIN approach)
+ * Only sample the border pixels of rect b. If all samples are the same,
+ * simply fill the box with that sample. Otherwise, split the box
+ * and recursively scan the halves.
  *
  * Depending on the corner of the subdivision, we can also reuse some of
  * the borders calculated earlier.
@@ -181,43 +232,31 @@ static int	sample_fractal(t_vars *v, int x, int y)
  * To prevent stack overflow, there is a depth limit after which we
  * use simple xy iteration to sample the remaining area.
 */
-void	draw_fractal(t_vars *v, int depth, t_rect b, int mask)
-//void	draw_fractal(t_vars *v, int base_sample, int depth, t_rect b)
+void	draw_fractal(t_vars *v, int depth, t_rect b)
 {
-	int	sample_diff;
-	int	n;
+	const int	split_v = (depth % 2 == 0);
+	int			base_n;
 
 	if (depth >= SUBDIV_DEPTH || b.w <= SUBD_RES || b.h <= SUBD_RES)
-		return (draw_fractal_simple (v, b));
-	if (b.base_n < 0)
-		b.base_n = sample_fractal (v, b.x + (b.w >> 1), b.y + (b.h >> 1));
+		return (draw_fractal_simple (v, (t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2}));
+		//return (draw_fractal_simple (v, b));
+	if (depth == 0)
+		sample_border (v, b);
+	base_n = get_sample (&v->img, b.x, b.y);
 
-	/*
-	ft_putstr("depth: ");
-	ft_putnbr(depth);
-	ft_putendl("");*/
+	if (check_match_bounds (&v->img, b, base_n))
+		return (draw_rect(&v->img, b, (unsigned int)(base_n)));
 
-	sample_diff = 0;
-	n = b.x - 1;
-	if ( CURRENT SUBDIVISION IS VERTICAL)
-	{
-	while (++n < b.x + b.w)
-		sample_diff |= (b.side == 0 && b.base_n != sample_fractal(v, n, 0))
-					| (b.side == 1 && b.base_n != sample_fractal (v, n, b.h - 1));
-	}
+	b.w >>= split_v;
+	b.h >>= !split_v;
+	if (split_v)
+		sample_border (v, (t_rect){b.w, b.y,  1, b.h});
 	else
-	{
-	n = b.y - 1;
-	while (++n < b.y + b.h)
-		sample_diff |= ((mask & 1) == 0 && b.base_n != sample_fractal(v, 0,       n))
-					| ((mask & 4) == 0 && b.base_n != sample_fractal (v, b.w - 1, n));
-	}
-	if (!sample_diff)
-	{
-		ft_putendl("no diff");
-		return (draw_rect(&v->img, b, sample_color(b.base_n)));
-	}
-	draw_fractal (v, depth + 1, r_split(b, 1), b.side);
-	draw_fractal (v, depth + 1, r_split(b, 0), b.side);
+		sample_border (v, (t_rect){b.x + 1, b.h, b.w - 2, 1});
+	
+	draw_fractal (v, depth + 1, b);
+
+	draw_fractal (v, depth + 1, (t_rect){
+		b.x + ((b.w) * split_v),
+		b.y + ((b.h) * !split_v), b.w, b.h});
 }
-#endif
