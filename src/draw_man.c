@@ -6,13 +6,13 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/05 17:04:05 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/05 21:56:44 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-
+# define DEBUG 1
 
 static inline unsigned int	sample_color(int n)
 {
@@ -22,12 +22,12 @@ static inline unsigned int	sample_color(int n)
 	return (palette[n % (sizeof(palette) / sizeof(int))]);
 #else
 		return (
-# if 1
+# if 0
 			(n * 5 | (n * 10) << 8 | (n * 20) << 16)
 # else
-			(n * 20)
+			(n * 5 | (n * 10) << 8 | (n * 20) << 16)
 # endif
-			& 0x00FFFFFF);
+			);
 #endif
 }
 
@@ -80,7 +80,7 @@ static inline int	mandelbrot(t_cx z, t_cx c)
 
 static void	draw_rect(t_img *img, t_rect b, unsigned int color)
 {
-#if 1
+#if 0
 	const uint64_t	dcolor = ((uint64_t)(color) | (uint64_t)(color) << 32);
 	unsigned int	*pxi;
 
@@ -92,9 +92,9 @@ static void	draw_rect(t_img *img, t_rect b, unsigned int color)
 		b.y ++;
 	}
 #else
-	for (int x = 0; x < b.w; x ++)
-		for (int y = 0; y < b.h; y ++)
-			set_pixel (img, b.x + x, b.y + y, color);
+	for (int x = b.x; x < (b.x + b.w); x ++)
+		for (int y = b.y; y < (b.y + b.h); y ++)
+			set_pixel (img, x, y, color);
 #endif
 }
 
@@ -111,7 +111,11 @@ static int	sample_fractal(t_vars *v, int x, int y)
 		scale(x, y, v->view),
 		v->view.mouse_complex);
 #endif
+# if DEBUG
+	set_pixel (&v->img, x, y, (unsigned int)(n | 0x01000000));
+# else
 	set_pixel (&v->img, x, y, (unsigned int)(n));
+# endif
 	return (n);
 }
 
@@ -121,6 +125,11 @@ static inline int	get_sample(t_img *img, int x, int y)
 
 	pxi = (unsigned int *)(img->addr);
 	pxi += y * WIN_RESX + x;
+# if DEBUG
+	// when we lookup a sample, if it's not marked as evaled, mark it as bad
+	if ((*pxi & 0xFF000000) != 0x01000000)
+		*pxi |= 0xFF000000;
+# endif
 	return (*pxi);
 }
 
@@ -128,22 +137,22 @@ static void	sample_border(t_vars *v, t_rect b)
 {
 	const int	ex = b.x + b.w - 1;
 	const int	ey = b.y + b.h - 1;
-	const int	w1 = (b.w == 1);
-	const int	h1 = (b.h == 1);
+	//const int	thin = (b.w == 1);
+	//const int	flat = (b.h == 1);
 	int			n;
 
 	n = b.x - 1;
-	while (++n <= ex)
+	while (++n <= ex) // WARN: this whole loop is unnecessary if thin
 	{
 		sample_fractal (v, n, b.y);
-		if (!h1)
+		//if (!flat)
 			sample_fractal (v, n, ey);
 	}
-	n = b.y;
-	while (++n < ey)
+	n = b.y - 1;
+	while (++n <= ey) // WARN: this whole loop is unnecessary if flat
 	{
 		sample_fractal (v, b.x, n);
-		if (!w1)
+		//if (!thin)
 			sample_fractal (v, ex, n);
 	}
 }
@@ -178,20 +187,38 @@ void	render_colors(t_img *img, t_rect b)
 	int	x;
 	int	y;
 
+	int	n = 0; //DEBUG
+	int n2 = 0;
+
 	x = b.x - 1;
 	while (++x < ex)
 	{
 		y = b.y - 1;
 		while (++y < ey)
+		{
 #if 0
 			buf_pixel (img, ++n, sample_color(
 				get_sample (img, x, y)));
+			n += WIN_RESX;
 #else
-		set_pixel (img, x, y,
-			sample_color(
-			get_sample (img, x, y)));
+#  if DEBUG
+			n = get_sample (img, x, y);
+			n2 = (n & 0xFF000000) >> 24;
+			if (n2 == 0xFF)
+				set_pixel (img, x, y, 0x00FF0000);
+			else if (n2 == 0x03)
+				set_pixel (img, x, y, 0x0000FF00);
+			else
+#  endif
+			set_pixel (img, x, y,
+				sample_color(
+				//get_sample (img, x, y)
+				n
+				& 0x00FFFFFF
+				)
+			);
 #endif
-		//n += WIN_RESX;
+		}
 	}
 }
 
@@ -209,6 +236,7 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 	{
 		x = b.x - 1;
 		while (++x <= ex)
+		{
 #if 0
 			buf_pixel (&v->img, ++n, sample_color(mandelbrot(
 				(t_cx){0.0L, 0.0L},
@@ -216,8 +244,9 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 			)));	
 		n += WIN_RESX - b.w;
 #else
-		sample_fractal (v, x, y);
+			sample_fractal (v, x, y);
 #endif
+		}
 	}
 }
 
@@ -238,23 +267,52 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 	int			base_n;
 
 	if (depth >= SUBDIV_DEPTH || b.w <= SUBD_RES || b.h <= SUBD_RES)
-		return (draw_fractal_simple (v, (t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2}));
-		//return (draw_fractal_simple (v, b));
+		return (draw_fractal_simple (v, b));
 	if (depth == 0)
 		sample_border (v, b);
 	base_n = get_sample (&v->img, b.x, b.y);
 
 	if (check_match_bounds (&v->img, b, base_n))
-		return (draw_rect(&v->img, b, (unsigned int)(base_n)));
+		return (draw_rect(&v->img,
+			b, (unsigned int)(
+			//(t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2}, (unsigned int)(
+			//(base_n & 0x00FFFFFF) | (depth << 24)
+			base_n
+		)));
 
 	b.w >>= split_v;
 	b.h >>= !split_v;
 	if (split_v)
-		sample_border (v, (t_rect){b.w, b.y,  1, b.h});
+	{
+		sample_border (v, (t_rect){
+			b.x + b.w,
+			b.y + 1,
+			1, b.h - 2});
+#  if DEBUG
+	draw_rect (&v->img, (t_rect){
+			b.x + b.w,
+			b.y + 1,
+			1, b.h - 2}, (base_n | 0x10000000));
+#  endif
+	}
 	else
-		sample_border (v, (t_rect){b.x + 1, b.h, b.w - 2, 1});
-	
-	draw_fractal (v, depth + 1, b);
+	{
+		sample_border (v, (t_rect){
+			b.x + 1,
+			b.y + b.h,
+			b.w - 2, 1});
+#  if DEBUG
+	draw_rect (&v->img, (t_rect){
+			b.x + 1,
+			b.y + b.h,
+			b.w - 2, 1}, (base_n | 0x10000000));
+#  endif
+	}
+
+
+	draw_fractal (v, depth + 1, (t_rect){
+		b.x, b.y,
+		b.w + 1, b.h + 1});
 
 	draw_fractal (v, depth + 1, (t_rect){
 		b.x + ((b.w) * split_v),

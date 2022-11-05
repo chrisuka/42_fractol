@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/04 18:22:01 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/05 20:38:33 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ int	on_keydown(int key, void *vars)
 	v->view.zoom *= 1 + ((key == KB_O) - (key == KB_I)) * ZOOM_STEP;
 	if (v->view.zoom > 2.0L || v->view.zoom <= 0.0L)
 		v->view.zoom = 2.0L;
+	if (key == KB_R)
+		v->view = (t_vrect){.x = 0.0L, .y = 0.0L,
+			.zoom = 1.0L, .mouse_complex = (t_cx){0.0L, 0.0L}};
 	v->dirty = 1;
 	if (key == KB_ESC)
 	{
@@ -75,9 +78,6 @@ int	on_keyup(int key, void *vars)
 	v = (t_vars *)(vars);
 	if (key == KB_ESC)
 		app_close (v, XC_EXIT);
-	if (key == KB_R)
-		v->view = (t_vrect){.x = 0.0L, .y = 0.0L,
-			.zoom = 1.0L, .mouse_complex = (t_cx){0.0L, 0.0L}};
 	return (0);
 }
 
@@ -93,6 +93,7 @@ int	on_render(void *vars)
 	v->dirty = 0;
 
 	
+	//if (1)
 	if (v->view.zoom >= 0.5L)
 		draw_fractal_simple (v, (t_rect){0, 0, WIN_RESX, WIN_RESY});
 	else
