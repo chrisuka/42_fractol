@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/05 22:05:36 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/06 21:18:02 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@
 # define PAN_STEP	0.25L
 # define ZOOM_STEP	0.25L
 
-# define MAX_DEPTH		200 // MAX ITERATIONS PER COMPLEX FUNCTION
+# define MAX_DEPTH		40 // MAX ITERATIONS PER COMPLEX FUNCTION
 # define PERIOD			20 // INTERVAL TO CHECK PERIODICITY
-# define SUBDIV_DEPTH	8 // MAX DEPTH TO RECURSE SUBDIVSIONS
+# define SUBDIV_DEPTH	14 // MAX DEPTH TO RECURSE SUBDIVSIONS
 # define SUBD_RES		4 // IF SUBDIVISION RESOLUTION LESS THAN THIS, GOTO SIMPLE
 
 # define XC_EXIT	0
@@ -100,9 +100,13 @@ void	buf_pixel(t_img *img, int n, unsigned int color);
 #  if 1
 void	draw_fractal_simple(t_vars *v, t_rect b);
 void	draw_fractal(t_vars *v, int depth, t_rect b);
-void	render_colors(t_img *img, t_rect b);
+int		get_sample(t_img *img, int x, int y);
 #  else
 void	draw_fractal(t_img *img, t_vrect view);
 #  endif
+
+/*/ Render /////////////*/
+
+void	render_colors(t_img *img, t_rect b);
 
 #endif
