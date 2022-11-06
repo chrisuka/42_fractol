@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/06 21:08:12 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/06 22:24:32 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,19 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 	}
 }
 
+# if 1
+// TODO: replace raw initializations with this
+static inline t_rect	r_inset(t_rect b, const int px)
+{
+	return ((t_rect){
+		.x = b.x + px,
+		.y = b.y + px,
+		.w = b.w - px * 2,
+		.h = b.h - px * 2,
+	});
+}
+# endif
+
 /* Mariani-Silver algorithm (DIN approach)
  * Only sample the border pixels of rect b. If all samples are the same,
  * simply fill the box with that sample. Otherwise, split the box
@@ -243,8 +256,9 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 
 	if (check_match_bounds (&v->img, b, base_n))
 		return (draw_rect(&v->img,
-			b, (unsigned int)(
-			//(t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2}
+			//b,
+			(t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2},
+			(unsigned int)(
 			//(base_n & 0x00FFFFFF) | (depth << 24)
 			base_n
 		)));
@@ -264,7 +278,8 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 
 	draw_fractal (v, depth + 1, (t_rect){
 		b.x, b.y,
-		b.w + split_v, b.h + !split_v}); // wh + 1 so the border check will be on the correct index
+		b.w + split_v, b.h + !split_v});
+		// wh + 1 so the border check will be on the correct index
 
 	draw_fractal (v, depth + 1, (t_rect){
 		b.x + ((b.w) * split_v),

@@ -6,12 +6,11 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/06 18:53:41 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/06 21:53:40 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-#include "keysym_macos.h"
 
 static inline int	print_usage(void)
 {

@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:19:08 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/06 21:14:10 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/06 21:21:17 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	render_colors(t_img *img, t_rect b)
 				set_pixel (img, x, y, 0x00FF0000);
 			else if ((n & 0xFF000000) == 0x02000000)
 				set_pixel (img, x, y,
-					sample_color(n) * 0.8L);
+					sample_color (n) * 0.8L);
 			else
 #  endif
 			set_pixel (img, x, y,
