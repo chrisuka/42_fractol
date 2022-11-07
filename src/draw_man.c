@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/06 22:24:32 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/07 19:18:12 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ static inline int	check_match_bounds(t_img *img, t_rect b, int base_n)
 	while (++n < ey)
 	{
 		if ((base_n != get_sample (img, b.x, n))
-		||  (base_n != get_sample (img, ex, n)))
+		||  (base_n != get_sample (img,  ex, n)))
 			return (0);
 	}
 	return (1);
@@ -210,7 +210,11 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 			)));	
 		n += WIN_RESX - b.w;
 #else
+	# if DEBUG
 			sample_fractal_2 (v, x, y);
+	# else
+			sample_fractal (v, x, y);
+	# endif
 #endif
 		}
 	}
@@ -248,7 +252,8 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 	if (depth >= SUBDIV_DEPTH || b.w <= SUBD_RES || b.h <= SUBD_RES)
 		return (draw_fractal_simple (v, 
 			//b
-			(t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2}
+			//(t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2}
+			r_inset (b, 1)
 			));
 	if (depth == 0)
 		sample_border (v, b);
@@ -283,5 +288,5 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 
 	draw_fractal (v, depth + 1, (t_rect){
 		b.x + ((b.w) * split_v),
-		b.y + ((b.h) * !split_v), b.w, b.h});
+		b.y + ((b.h) * !split_v), b.w + split_v, b.h + !split_v});
 }
