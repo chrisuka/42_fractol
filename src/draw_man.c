@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/07 19:18:12 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/09 01:46:34 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ static void	draw_rect(t_img *img, t_rect b, unsigned int color)
 	const uint64_t	dcolor = ((uint64_t)(color) | (uint64_t)(color) << 32);
 	unsigned int	*pxi;
 
-	pxi = (((unsigned int *)(img->addr)) + b.y * WIN_RESX + b.x);
+	//pxi = (((unsigned int *)(img->addr)) + b.y * WIN_RESX + b.x);
+	pxi = (unsigned int *)(img->addr);
+	pxi += b.y * WIN_RESX + b.x;
 	while (b.y < b.h)
 	{
 		ft_bset64 (pxi, dcolor, b.w);
@@ -165,24 +167,29 @@ static void	sample_border(t_vars *v, t_rect b)
 	}
 }
 
-static inline int	check_match_bounds(t_img *img, t_rect b, int base_n)
+static inline int	compare_bounds_eq(t_img *img, t_rect b, int base)
 {
 	const int	ex = b.x + b.w - 1;
 	const int	ey = b.y + b.h - 1;
 	int			n;
 
+#if DEBUG
+	if (ex >= WIN_RESX || ey >= WIN_RESY)
+		ft_putendl(CRED "pixel overflow!" CNIL);
+#endif
+
 	n = b.x - 1;
 	while (++n <= ex)
 	{
-		if ((base_n != get_sample (img, n, b.y))
-		||  (base_n != get_sample (img, n, ey)))
+		if ((base != get_sample (img, n, b.y))
+		||  (base != get_sample (img, n, ey)))
 			return (0);
 	}
 	n = b.y;
 	while (++n < ey)
 	{
-		if ((base_n != get_sample (img, b.x, n))
-		||  (base_n != get_sample (img,  ex, n)))
+		if ((base != get_sample (img, b.x, n))
+		||  (base != get_sample (img,  ex, n)))
 			return (0);
 	}
 	return (1);
@@ -248,7 +255,11 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 {
 	const int	split_v = (depth % 2 == 0);
 	int			base_n;
+	const int	w_odd = (b.w % 2 == 1);
+	const int	h_odd = (b.h % 2 == 1);
 
+	// NOTE: you see the window frames because when it subdivides and recurses,
+	//  reaching max depth it doesn't even bother checking bounds, just brute-forces
 	if (depth >= SUBDIV_DEPTH || b.w <= SUBD_RES || b.h <= SUBD_RES)
 		return (draw_fractal_simple (v, 
 			//b
@@ -259,10 +270,10 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 		sample_border (v, b);
 	base_n = get_sample (&v->img, b.x, b.y);
 
-	if (check_match_bounds (&v->img, b, base_n))
+	if (compare_bounds_eq (&v->img, b, base_n))
 		return (draw_rect(&v->img,
-			//b,
-			(t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2},
+			//(t_rect){b.x + 1, b.y + 1, b.w - 2, b.h - 2},
+			r_inset (b, 1),
 			(unsigned int)(
 			//(base_n & 0x00FFFFFF) | (depth << 24)
 			base_n
@@ -285,8 +296,13 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 		b.x, b.y,
 		b.w + split_v, b.h + !split_v});
 		// wh + 1 so the border check will be on the correct index
+		//  start at 0, end at wh - 1 (iterate until w + 1 exclusive which equals xy + wh (border px)
 
+	// FIXME: this math is STILL NOT RIGHT!!
+	// NOTE: if AA doesn't match but AAA does, AAB will lut garbage
+	// likely somehow related to odd division
 	draw_fractal (v, depth + 1, (t_rect){
-		b.x + ((b.w) * split_v),
-		b.y + ((b.h) * !split_v), b.w + split_v, b.h + !split_v});
+		b.x + (b.w * split_v),
+		b.y + (b.h * !split_v), b.w + (w_odd && split_v), b.h + (h_odd && !split_v)});
+	// we don't want to offset wh here, xy + wh = start at border index,
 }

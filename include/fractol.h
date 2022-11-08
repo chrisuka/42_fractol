@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/07 19:22:13 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/09 01:38:58 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 # define MAX_DEPTH		40 // MAX ITERATIONS PER COMPLEX FUNCTION
 # define PERIOD			20 // INTERVAL TO CHECK PERIODICITY
-# define SUBDIV_DEPTH	14 // MAX DEPTH TO RECURSE SUBDIVSIONS
+# define SUBDIV_DEPTH	16 // MAX DEPTH TO RECURSE SUBDIVSIONS
 # define SUBD_RES		4 // IF SUBDIVISION RESOLUTION LESS THAN THIS, GOTO SIMPLE
 
 # define XC_EXIT	0
@@ -72,7 +72,7 @@ typedef struct s_vars_data_container {
 	t_img	img;
 	t_vrect	view;
 
-	int		lock_cursor;
+	int		lock_cursor : 1;
 	int		dirty : 1;
 	int		mx_old;
 	int		my_old;

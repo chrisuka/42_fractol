@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 21:27:26 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/09 21:50:11 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/07 20:12:59 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,13 @@
 #  define CNIL		"\033[0;0m"
 # endif
 
-# define GUI_MARGIN	10
-
 # define GUI_ANCHOR_CENTER	0
 # define GUI_ANCHOR_TOP_L	1
 # define GUI_ANCHOR_TOP_R	2
 # define GUI_ANCHOR_BOT_R	3
 # define GUI_ANCHOR_BOT_L	4
 
-# define GUI_BG_COLOR		0x00101010
-# define TEXT_ROWOFF		15
-# define TEXT_COLOR			0x00BB80FF
-
-# define BG_COLOR			0x006C4221ULL
-# define MAP_COLOR			0x00FF00AA
+# define GTXT_CELL_W		10
+# define GTXT_CELL_H		15
 
 #endif
