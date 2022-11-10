@@ -6,7 +6,7 @@
 #    By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/15 19:18:05 by ikarjala          #+#    #+#              #
-#    Updated: 2022/11/09 22:01:50 by ikarjala         ###   ########.fr        #
+#    Updated: 2022/11/09 23:47:05 by ikarjala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,10 @@ LIBS		= $(LIBFT) $(MLX)
 LIBFT		= -L libft -lft
 MLX			= -L /usr/local/lib/ -lmlx -framework OpenGL -framework AppKit
 
-CFLAGS		= -Wall -Werror -Wextra
-DBFLAGS		= -g -fsanitize=address
-CFSTRICT	= -Wimplicit -Wunused
 CC			:= clang
+CFLAGS		= -Wall -Werror -Wextra
+CFSTRICT	= -Wimplicit -Wunused -Wconversion
+DBFLAGS		= -g -fsanitize=address
 
 #=== TARGETS ==================================================================
 .PHONY: all clean fclean re debug d db so strict W
@@ -82,25 +82,23 @@ ECHO	:= echo
 	@$(ECHO)	$(BMSG_CC)
 	@touch .buildinfo
 
-BMSG_BIN	= "$(BLUE)$(NAME) :: $(CYANB)Starting $(BMSG_FORM) build...$(CNIL)"
 BMSG_FORM	:= --DEPLOY--
-
+BMSG_BIN	= "$(BLUE)$(NAME) :: $(CYANB)Starting $(BMSG_FORM) build...$(CNIL)"
 BMSG_CC		= "$(BLUE)$(NAME) :: $(CNIL)$(CC) $(CFLAGS)"
 BMSG_LD		= "$(BLUE)$(NAME) :: $(PURPLEB)Linking: $(CNIL)$(LIBS)"
 BMSG_FIN	= "$(BLUE)$(NAME) :: $(GREENB)Build success!$(CNIL)"
 
-RED		:=\033[1;31m
-GREEN	:=\033[0;32m
-GREENB	:=\033[1;32m
-GOLD	:=\033[0;33m
-GOLDB	:=\033[1;33m
-BLUE	:=\033[0;34m
-BLUEB	:=\033[1;34m
-PURPLE	:=\033[0;35m
-PURPLEB	:=\033[1;35m
-CYAN	:=\033[0;36m
-CYANB	:=\033[1;36m
 CNIL	:=\033[0;0m
+RED		:=\033[0;31m
+GREEN	:=\033[0;32m
+GOLD	:=\033[0;33m
+BLUE	:=\033[0;34m
+PURPLE	:=\033[0;35m
+CYAN	:=\033[0;36m
+
+CYANB	:=\033[1;36m
+PURPLEB	:=\033[1;35m
+GREENB	:=\033[1;32m
 
 CMD_NORME	= norminette -R CheckForbiddenSourceHeader
 norme:

@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/09 01:38:58 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/10 02:02:53 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ typedef struct s_vars_data_container {
 
 	int		lock_cursor : 1;
 	int		dirty : 1;
-	int		mx_old;
-	int		my_old;
 }	t_vars;
 
 /*/ App Control ////////*/
