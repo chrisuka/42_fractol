@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/09 23:14:36 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/11 19:10:51 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static inline t_vars	instantiate_mlx(char *wname)
 	return (v);
 }
 
-# define DEBUG 0
 #if DEBUG
 #include <stdio.h>
 int	test(void)

@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/10 02:02:53 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/11 20:29:04 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include "libft.h"
 # include "graphics_util.h"
 # include "keysym_macos.h"
+
+# define DEBUG 1//DEBUG
 
 # define BIN_NAME	"fractol"
 # define WIN_TITLE	"Fract'ol"
@@ -74,6 +76,7 @@ typedef struct s_vars_data_container {
 
 	int		lock_cursor : 1;
 	int		dirty : 1;
+	//int		debug : 1;
 }	t_vars;
 
 /*/ App Control ////////*/
@@ -92,16 +95,19 @@ int		on_render(void *vars);
 
 void	set_pixel(t_img *img, int x, int y, unsigned int color);
 void	buf_pixel(t_img *img, int n, unsigned int color);
+void	draw_rect(t_img *img, t_rect b, unsigned int color);
 
 /*/ Draw Manager ///////*/
 
-#  if 1
 void	draw_fractal_simple(t_vars *v, t_rect b);
 void	draw_fractal(t_vars *v, int depth, t_rect b);
+
+/*/ Sampler ////////////*/
+
+void	sample_border(t_vars *v, t_rect b);
+int		sample_fractal(t_vars *v, int x, int y);
+int		sample_fractal_2(t_vars *v, int x, int y);
 int		get_sample(t_img *img, int x, int y);
-#  else
-void	draw_fractal(t_img *img, t_vrect view);
-#  endif
 
 /*/ Render /////////////*/
 
