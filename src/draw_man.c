@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/11 20:28:49 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 01:10:11 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,21 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 	}
 }
 
-static inline t_rect	r_choose(const int condition, t_rect a, t_rect b)
+static inline t_rect	r_splitter(t_rect b, const int vertical)
 {
-	if (condition)
-		return (a);
-	return (b);
+	if (vertical)
+		return ((t_rect){
+			b.x + b.w,
+			b.y + 1,
+			1,
+			b.h - 2
+		});
+	return ((t_rect){
+		b.x + 1,
+		b.y + b.h,
+		b.w - 2,
+		1
+	});
 }
 
 /* Mariani-Silver algorithm (DIN approach)
@@ -103,32 +113,20 @@ static inline t_rect	r_choose(const int condition, t_rect a, t_rect b)
 */
 void	draw_fractal(t_vars *v, int depth, t_rect b)
 {
+	const int	*o_px = ((int *)(v->img.addr)) + b.y * WIN_RESX + b.x;
 	const int	split_v = (depth % 2 == 0);
 	const int	w_odd = (b.w % 2 == 1);
 	const int	h_odd = (b.h % 2 == 1);
-	int			base_n;
 
 	if (depth == 0)
 		sample_border (v, b);
-	base_n = get_sample (&v->img, b.x, b.y);
-
-#if 0
-	if ((depth == 0 && sample_border(v, b) == 1)
-		|| border_equ(&v->img, b, get_sample(&v->img, b.x, b.y))
-		)
-#endif
-
-	if (border_equ (&v->img, b, base_n))
-		return (draw_rect(&v->img, r_inset (b, 1), (unsigned int)(base_n)));
-
-	if (depth >= SUBDIV_DEPTH || b.w <= SUBD_RES || b.h <= SUBD_RES)
+	if (border_equ (&v->img, b, *o_px))
+		return (draw_rect (&v->img, r_inset (b, 1), *o_px));
+	if (depth >= SUBDIV_DEPTH || (b.w <= SUBD_RES && b.h <= SUBD_RES))
 		return (draw_fractal_simple (v, r_inset (b, 1)));
-
 	b.w >>= split_v;
 	b.h >>= !split_v;
-	sample_border (v, r_choose (split_v, (t_rect)
-		{b.x + b.w, b.y + 1, 1, b.h - 2}, (t_rect)
-		{b.x + 1, b.y + b.h, b.w - 2, 1}));
+	sample_border (v, r_splitter (b, split_v));
 
 	draw_fractal (v, depth + 1, (t_rect){
 		b.x, b.y, b.w + split_v, b.h + !split_v});

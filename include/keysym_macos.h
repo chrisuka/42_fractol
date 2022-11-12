@@ -6,20 +6,20 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 15:28:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/09 17:24:36 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 02:00:15 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEYSYM_MACOS_H
 # define KEYSYM_MACOS_H
 
-# define MOUSE_BUTTON_LEFT		1
-# define MOUSE_BUTTON_RIGHT		2
-# define MOUSE_BUTTON_MIDDLE	3
-# define MOUSE_SCROLL_UP		4
-# define MOUSE_SCROLL_DOWN		5
-# define MOUSE_SCROLL_LEFT		6
-# define MOUSE_SCROLL_RIGHT		7
+# define M_BUTTON_L		1
+# define M_BUTTON_R		2
+# define M_BUTTON_M		3
+# define M_SCROLL_U		4
+# define M_SCROLL_D		5
+# define M_SCROLL_L		6
+# define M_SCROLL_R		7
 
 # define ARROW_UP		126
 # define ARROW_DOWN		125

@@ -6,7 +6,7 @@
 #    By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/15 19:18:05 by ikarjala          #+#    #+#              #
-#    Updated: 2022/11/11 20:16:00 by ikarjala         ###   ########.fr        #
+#    Updated: 2022/11/12 02:06:32 by ikarjala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME	:= fractol
 BIN		= $(ROOT)$(NAME)
 
 CFUNC	=\
-main events app_control draw_util draw_man render sampler
+main events app_control draw_util draw_man render sampler fractals
 
 SRC_DIR		= $(ROOT)src/
 OBJ_DIR		= $(ROOT)obj/
@@ -34,7 +34,7 @@ LIBFT		= -L libft -lft
 MLX			= -L /usr/local/lib/ -lmlx -framework OpenGL -framework AppKit
 
 CC			:= clang
-CFLAGS		= -Wall -Werror -Wextra
+CFLAGS		= -Wall -Werror -Wextra -O3
 CFSTRICT	= -Wimplicit -Wunused -Wconversion
 DBFLAGS		= -g -fsanitize=address
 
@@ -102,7 +102,7 @@ GREENB	:=\033[1;32m
 
 CMD_NORME	= norminette -R CheckForbiddenSourceHeader
 norme:
-	$(CMD_NORME) $(INC_DIR)*.h $(SRC)
+	$(CMD_NORME) $(INC_DIR)*.h $(SRC)*.c
 run: $(NAME)
 	$(BIN) julia
 #==============================================================================

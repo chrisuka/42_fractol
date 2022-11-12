@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/11 20:29:04 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 02:05:07 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_vars_data_container {
 /*/ App Control ////////*/
 
 void	app_close(t_vars *v, int code);
+int		key_axis(int key, const int pval, const int nval);
 
 /*/ Events /////////////*/
 
@@ -112,5 +113,9 @@ int		get_sample(t_img *img, int x, int y);
 /*/ Render /////////////*/
 
 void	render_colors(t_img *img, t_rect b);
+
+/*/ Fractals ///////////*/
+
+int	mandelbrot(t_cx z, t_cx c);
 
 #endif

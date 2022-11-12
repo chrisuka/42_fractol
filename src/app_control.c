@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/16 20:41:16 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/10/24 14:46:23 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 02:00:20 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,13 @@ void	app_close(t_vars *v, int code)
 	v->mlxo = NULL;
 	v->mlx_win = NULL;
 	exit(code);
+}
+
+int	key_axis(int key, const int pval, const int nval)
+{
+	if (key == pval)
+		return (1);
+	if (key == nval)
+		return (-1);
+	return (0);
 }

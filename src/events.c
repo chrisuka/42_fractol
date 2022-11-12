@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/10 00:08:28 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 01:46:45 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 static inline t_cx	mouse_scale(int x, int y, t_vrect view)
 {
 	const double	w = ft_min(WIN_RESX, WIN_RESY) * 0.5L;
+	const double	amp = 0.01L;
 
 	return ((t_cx){
-		.x = (double)(x - w) * 0.01L * view.zoom + view.x,
-		.y = (double)(y - w) * 0.01L * view.zoom + view.y});
+		.x = (double)(x - w) * amp * view.zoom + view.x,
+		.y = (double)(y - w) * amp * view.zoom + view.y});
 }
 
 int	on_mousemove(int x, int y, void *vars)
@@ -37,14 +38,16 @@ int	on_mousedown(int key, int x, int y, void *vars)
 {
 	t_vars	*v;
 
-	x = 0;
-	y = 0;
 	v = (t_vars *)(vars);
-	v->view.zoom *= 1 + ((key == MOUSE_SCROLL_UP) - (key == MOUSE_SCROLL_DOWN)) * ZOOM_STEP;
+	v->view.zoom *= 1 + key_axis (key, M_SCROLL_U, M_SCROLL_D) * ZOOM_STEP;
 	if (v->view.zoom > 2.0L || v->view.zoom <= 0.0L)
 		v->view.zoom = 2.0L;
-	v->lock_cursor |= (key == MOUSE_BUTTON_LEFT);
-	v->lock_cursor &= (key != MOUSE_BUTTON_RIGHT);
+	v->lock_cursor |= (key == M_BUTTON_L);
+	v->lock_cursor &= (key != M_BUTTON_R);
+	
+	v->view.x = mouse_scale (x, y, v->view).x;
+	v->view.y = mouse_scale (x, y, v->view).y;
+
 	v->dirty = 1;
 	return (0);
 }
@@ -54,9 +57,9 @@ int	on_keydown(int key, void *vars)
 	t_vars	*v;
 
 	v = (t_vars *)(vars);
-	v->view.x += ((key == ARROW_RIGHT) - (key == ARROW_LEFT)) * PAN_STEP * v->view.zoom;
-	v->view.y -= ((key == ARROW_UP) - (key == ARROW_DOWN)) * PAN_STEP * v->view.zoom;
-	v->view.zoom *= 1 + ((key == KB_O) - (key == KB_I)) * ZOOM_STEP;
+	v->view.x += key_axis (key, ARROW_RIGHT, ARROW_LEFT) * PAN_STEP * v->view.zoom;
+	v->view.y -= key_axis (key, ARROW_UP, ARROW_DOWN) * PAN_STEP * v->view.zoom;
+	v->view.zoom *= 1 - key_axis (key, KB_I, KB_O) * ZOOM_STEP;
 	if (v->view.zoom > 2.0L || v->view.zoom <= 0.0L)
 		v->view.zoom = 2.0L;
 	if (key == KB_R)

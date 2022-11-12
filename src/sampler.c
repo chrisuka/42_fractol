@@ -6,48 +6,11 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 19:09:17 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/11 20:28:51 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 02:04:22 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-
-/* Return a sample indicating whether point c in the complex plane
- * falls inside the Mandelbrot Set, namely how many iterations it took
- *
- * Escape time algorithm: z2 n(c) = z2 + c
- * z = iterating complex function, using its own xy as input
- * z2 = z squared
- * c = complex constant, gets added to z every iteration
-*/
-static inline int	mandelbrot(t_cx z, t_cx c)
-{
-	t_cx	z2;
-	t_cx	old;
-	int		period;
-	int		n;
-
-	//z = (t_cx){0.0L, 0.0L};
-	z2 = (t_cx){z.x * z.x, z.y * z.y};
-	period = 0;
-	n = -1;
-	while (++n < MAX_DEPTH && z2.x + z2.y <= 4.0L)
-	{
-		z.y = 2 * z.x * z.y + c.y;
-		z.x = z2.x - z2.y + c.x;
-		z2.x = (z.x * z.x);
-		z2.y = (z.y * z.y);
-		if (z2.x == old.x && z2.y == old.y)
-			return (MAX_DEPTH);
-		period ++;
-		if (period > PERIOD)
-		{
-			old = z2;
-			period = 0;
-		}
-	}
-	return (n);
-}
 
 /* Return a position representing the
  * screen-space coordinates in the complex plane
@@ -73,7 +36,7 @@ int	get_sample(t_img *img, int x, int y)
 	pxi += y * WIN_RESX + x;
 # if DEBUG
 	if (x >= WIN_RESX || y >= WIN_RESY)
-		ft_putendl(CRED "pixel overflow!" CNIL);
+		ft_putendl (CRED "pixel overflow!" CNIL);
 	// when we lookup a sample, if it's not marked as evaled, mark it as bad
 	if ((*pxi & 0xFF000000) == 0x02000000); // ignore 0x02 (brute-forced pixel)
 	else if ((*pxi & 0xFF000000) != 0x01000000)
