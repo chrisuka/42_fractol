@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 19:09:17 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 02:04:22 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 21:19:09 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ int	get_sample(t_img *img, int x, int y)
 {
 	unsigned int	*pxi;
 
-	pxi = (unsigned int *)(img->addr);
-	pxi += y * WIN_RESX + x;
+	pxi = ((unsigned int *)(img->addr)) + y * WIN_RESX + x;
 # if DEBUG
 	if (x >= WIN_RESX || y >= WIN_RESY)
 		ft_putendl (CRED "pixel overflow!" CNIL);

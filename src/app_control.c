@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/16 20:41:16 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 02:00:20 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 21:58:27 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,3 +29,16 @@ int	key_axis(int key, const int pval, const int nval)
 		return (-1);
 	return (0);
 }
+
+#if 0
+double	*choose_fractal(int index);
+{
+	const double	(*zf)(t_cx, t_cx)[] = {
+		&z_mandelbrot,
+		&z_tricorn,
+		&z_burning_ship
+	};
+
+	return (&zf[index % sizeof(zf) / sizeof(zf[0])]);
+}
+#endif

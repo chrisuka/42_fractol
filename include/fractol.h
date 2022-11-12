@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 02:05:07 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 21:01:30 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@
 # include "graphics_util.h"
 # include "keysym_macos.h"
 
-# define DEBUG 1//DEBUG
+# define DEBUG 0//DEBUG
 
 # define BIN_NAME	"fractol"
 # define WIN_TITLE	"Fract'ol"
-# define WIN_RESX	640
-# define WIN_RESY	640
+# define WIN_RESX	1024
+# define WIN_RESY	1024
 
 # define PAN_STEP	0.25L
 # define ZOOM_STEP	0.25L
 
-# define MAX_DEPTH		40 // MAX ITERATIONS PER COMPLEX FUNCTION
+# define MAX_DEPTH		200 // MAX ITERATIONS PER COMPLEX FUNCTION
 # define PERIOD			20 // INTERVAL TO CHECK PERIODICITY
 # define SUBDIV_DEPTH	16 // MAX DEPTH TO RECURSE SUBDIVSIONS
 # define SUBD_RES		4 // IF SUBDIVISION RESOLUTION LESS THAN THIS, GOTO SIMPLE
@@ -39,6 +39,11 @@
 # define ECONTINUE	0
 # define EEXIT		1
 # define EINTERNAL	2
+
+typedef struct s_tuple {
+	int	x;
+	int	y;
+}	t_tuple;
 
 typedef struct s_complex
 {
@@ -74,6 +79,7 @@ typedef struct s_vars_data_container {
 	t_img	img;
 	t_vrect	view;
 
+	int		max_samples;
 	int		lock_cursor : 1;
 	int		dirty : 1;
 	//int		debug : 1;
@@ -117,5 +123,9 @@ void	render_colors(t_img *img, t_rect b);
 /*/ Fractals ///////////*/
 
 int	mandelbrot(t_cx z, t_cx c);
+
+/*/ GUI ////////////////*/
+
+void	put_gui_static(t_vars *v, t_rect b);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/11 19:10:51 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 21:12:37 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static inline int	print_usage(void)
 {
-	const char	msg[] = "usage:  " BIN_NAME " mandelbrot|julia|burningship\n";
+	const char	msg[] = "usage:  " BIN_NAME " <"
+		"mandelbrot | julia | tricorn | ship" ">\n";
 
 	write (1, msg, sizeof(msg) - 1);
 	return (XC_ERROR);
@@ -38,6 +39,7 @@ static inline t_vars	instantiate_mlx(char *wname)
 		.img = (t_img){.o = NULL, .addr = NULL},
 		.view = (t_vrect){.x = 0.0L, .y = 0.0L, .zoom = 1.0L,
 		.mouse_complex = (t_cx){0.0L, 0.0L}},
+		.max_samples = 40,
 		.lock_cursor = 0,
 		.dirty = 1
 	};
@@ -68,6 +70,9 @@ int	main(int argc, char **argv)
 		return (print_usage());
 	v = instantiate_mlx(WIN_TITLE);
 	add_hooks (&v);
+
+//	put_gui_static (&v, (t_rect){0, 0, WIN_RESX, 20});
+
 	mlx_loop (v.mlxo);
 	return (XC_EXIT);
 }

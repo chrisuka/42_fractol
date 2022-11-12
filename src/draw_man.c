@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 01:10:11 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 19:43:23 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ static inline int	border_equ(t_img *img, t_rect b, int base)
 	while (++n <= ex)
 	{
 		if ((base != get_sample (img, n, b.y))
-		||  (base != get_sample (img, n, ey)))
+			|| (base != get_sample (img, n, ey)))
 			return (0);
 	}
 	n = b.y;
 	while (++n < ey)
 	{
 		if ((base != get_sample (img, b.x, n))
-		||  (base != get_sample (img,  ex, n)))
+			|| (base != get_sample (img, ex, n)))
 			return (0);
 	}
 	return (1);
@@ -55,7 +55,7 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 	const int	ey = b.y + b.h - 1;
 	int			x;
 	int			y;
-	//int			n;
+	//int		n;
 
 	//n = b.y * WIN_RESX + b.x - 1;
 	y = b.y - 1;
@@ -81,6 +81,8 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 	}
 }
 
+/* Return the bounds of a horizontal or vertical division line for rect b.
+ */
 static inline t_rect	r_splitter(t_rect b, const int vertical)
 {
 	if (vertical)

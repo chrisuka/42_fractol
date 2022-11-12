@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 21:27:26 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/07 20:12:59 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 21:09:31 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define GUI_ANCHOR_BOT_R	3
 # define GUI_ANCHOR_BOT_L	4
 
-# define GTXT_CELL_W		10
-# define GTXT_CELL_H		15
+# define GUI_CELL_W		10
+# define GUI_CELL_H		25
 
 #endif

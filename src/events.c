@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 01:46:45 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 21:29:57 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,14 @@ int	on_keyup(int key, void *vars)
 
 int	on_render(void *vars)
 {
-	const t_rect	screen = (t_rect){0, 0, WIN_RESX, WIN_RESY};
+	//const t_rect	screen = (t_rect){0, 0, WIN_RESX, WIN_RESY};
+	const t_rect	screen = (t_rect){0, GUI_CELL_H, WIN_RESX, WIN_RESY - GUI_CELL_H};
 	t_vars			*v;
 
 	v = (t_vars *)(vars);
 	if (!v->dirty)
 		return (0);
 	v->dirty = 0;
-
 	if (v->view.zoom >= 0.5L)
 		draw_fractal_simple (v, screen);
 	else
@@ -101,5 +101,7 @@ int	on_render(void *vars)
 	render_colors (&v->img, screen);
 
 	mlx_put_image_to_window (v->mlxo, v->mlx_win, v->img.o, 0, 0);
+
+	put_gui_static (v, (t_rect){0, 0, WIN_RESX, GUI_CELL_H});
 	return (0);
 }

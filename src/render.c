@@ -6,13 +6,11 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:19:08 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/09 01:35:59 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/12 18:11:58 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-
-# define DEBUG 1
 
 static inline unsigned int	sample_color(int n)
 {
