@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 19:09:17 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 21:19:09 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/13 22:09:00 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,20 @@ int	get_sample(t_img *img, int x, int y)
 	return (*pxi);
 }
 
+# define JULIA 0
 #if DEBUG
 int	sample_fractal_2	(t_vars *v, int x, int y)
 {
-	int n = mandelbrot(
+	int	n;
+#  if JULIA
+	n = mandelbrot(
 		scale(x, y, v->view),
 		v->view.mouse_complex);
+#  else
+	n = mandelbrot(
+		(t_cx){0.0L, 0.0L},
+		scale(x, y, v->view));
+#  endif
 	set_pixel (&v->img, x, y, (unsigned int)(n | 0x02000000));
 	return (n);
 }
@@ -59,15 +67,15 @@ int	sample_fractal(t_vars *v, int x, int y)
 {
 	int	n;
 
-#if 0
-	n = mandelbrot(
-		(t_cx){0.0L, 0.0L},
-		scale(x, y, v->view));
-#else
+#  if JULIA
 	n = mandelbrot(
 		scale(x, y, v->view),
 		v->view.mouse_complex);
-#endif
+#  else
+	n = mandelbrot(
+		(t_cx){0.0L, 0.0L},
+		scale(x, y, v->view));
+#  endif
 # if DEBUG
 	set_pixel (&v->img, x, y, (unsigned int)(n | 0x01000000));
 # else
