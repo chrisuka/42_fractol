@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:19:08 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/13 20:11:22 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/13 22:59:01 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,20 @@ void	render_colors(t_img *img, t_rect b)
 	const int	ey = b.y + b.h;
 	int	x;
 	int	y;
+	int	n = b.y * WIN_RESX + b.x; //DEBUG
 
-	int	n = 0; //DEBUG
-
-	x = b.x - 1;
-	while (++x < ex)
+	y = b.y - 1;
+	while (++y < ey)
 	{
-		y = b.y - 1;
-		while (++y < ey)
+		x = b.x - 1;
+		while (++x < ex)
 		{
-#if 0
-			buf_pixel (img, ++n, sample_color(
-				get_sample (img, x, y)));
-			n += WIN_RESX;
+#if 1
+			buf_pixel (img, n, eval_color (
+				((unsigned int *)(img->addr))[n]
+				//get_sample (img, x, y)
+			));
+			++n;
 #else
 			n = get_sample (img, x, y);
 #  if DEBUG
@@ -90,6 +91,7 @@ void	render_colors(t_img *img, t_rect b)
 			);
 #endif
 		}
+		n += WIN_RESX - b.w;
 	}
 	//clear_alpha (img, WIN_RESX * WIN_RESY);
 }

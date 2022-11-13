@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/13 21:04:30 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/13 22:25:59 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static inline int	print_usage(void)
 {
 	const char	msg[] = "usage:  " BIN_NAME " <"
-		CBGOLD "mandelbrot | julia | tricorn | ship" CNIL ">\n";
+		CBGOLD "julia | mandelbrot | tricorn | ship" CNIL ">\n";
 
 	write (1, msg, sizeof(msg) - 1);
 	return (XC_ERROR);
@@ -54,7 +54,7 @@ static inline t_vars	instantiate_mlx(char *wname)
 #if 1
 static int	parse_arg(char *arg)
 {
-	const char	*ops[] = {"mandelbrot", "julia", "tricorn", "ship"};
+	const char	*ops[] = {"julia", "mandelbrot", "tricorn", "ship"};
 	int			n;
 	
 	n = -1;

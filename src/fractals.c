@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 02:04:07 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/13 22:10:37 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/13 22:25:04 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ static inline double	choose_z(t_cx z, t_cx c, int n)
 		return (z_tricorn (z, c));
 	else if (n == 3)
 		return (z_burning_ship (z, c));
-	return (0.0L);
+	return (z_mandelbrot (z, c));
 }
 
 /* Return a sample indicating whether point c in the complex plane
  * falls inside the Mandelbrot Set, namely how many iterations it took
  *
  * Escape time algorithm: z2 n(c) = z2 + c
- * z = iterating complex function, using its own xy as input
+ * z = iterating complex, using its own (R,i == x,y) as input
  * z2 = z squared
  * c = complex constant, gets added to z every iteration
 */
