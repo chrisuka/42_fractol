@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 02:04:07 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 21:09:56 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/13 21:32:28 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	mandelbrot(t_cx z, t_cx c)
 	int		n;
 
 	z2 = (t_cx){z.x * z.x, z.y * z.y};
+	old = z2;
 	period = 0;
 	n = -1;
 	while (++n < MAX_DEPTH && z2.x + z2.y <= 4.0L)
@@ -57,7 +58,6 @@ int	mandelbrot(t_cx z, t_cx c)
 		z.y = z_mandelbrot(z, c);
 		z.x = z2.x - z2.y + c.x;
 		z2 = (t_cx){z.x * z.x, z.y * z.y};
-		// WARN: old is uninitialized!!
 		if (z2.x == old.x && z2.y == old.y)
 			return (MAX_DEPTH);
 		period ++;
@@ -71,3 +71,4 @@ int	mandelbrot(t_cx z, t_cx c)
 }
 
 // TODO: remember to make this back into inline!
+// TODO: add dispatch table / if branches (might be faster idk)

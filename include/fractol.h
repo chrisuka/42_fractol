@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 21:01:30 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/13 21:00:17 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "graphics_util.h"
 # include "keysym_macos.h"
 
-# define DEBUG 0//DEBUG
+# define DEBUG 1//DEBUG
 
 # define BIN_NAME	"fractol"
 # define WIN_TITLE	"Fract'ol"
@@ -79,6 +79,7 @@ typedef struct s_vars_data_container {
 	t_img	img;
 	t_vrect	view;
 
+	int		fractal_type;
 	int		max_samples;
 	int		lock_cursor : 1;
 	int		dirty : 1;

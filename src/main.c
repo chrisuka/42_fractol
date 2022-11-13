@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 21:12:37 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/13 21:04:30 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static inline int	print_usage(void)
 {
 	const char	msg[] = "usage:  " BIN_NAME " <"
-		"mandelbrot | julia | tricorn | ship" ">\n";
+		CBGOLD "mandelbrot | julia | tricorn | ship" CNIL ">\n";
 
 	write (1, msg, sizeof(msg) - 1);
 	return (XC_ERROR);
@@ -51,24 +51,35 @@ static inline t_vars	instantiate_mlx(char *wname)
 	return (v);
 }
 
-#if DEBUG
-#include <stdio.h>
-int	test(void)
+#if 1
+static int	parse_arg(char *arg)
 {
-	return (0);
+	const char	*ops[] = {"mandelbrot", "julia", "tricorn", "ship"};
+	int			n;
+	
+	n = -1;
+	while (++n < (int)(sizeof(ops) / sizeof(ops[0])))
+	{
+		if (ft_strequ (ops[n], arg))
+			return (n);
+	}
+	return (-1);
 }
 #endif
+
 int	main(int argc, char **argv)
 {
 	t_vars	v;
+	int		fractal_type;
 
-#if DEBUG
-	test ();
-#endif
-	argv = NULL;
 	if (argc != 2)
 		return (print_usage());
+	fractal_type = parse_arg(argv[1]);
+	if (fractal_type == -1)
+		return (print_usage());
 	v = instantiate_mlx(WIN_TITLE);
+	v.fractal_type = fractal_type;
+
 	add_hooks (&v);
 
 //	put_gui_static (&v, (t_rect){0, 0, WIN_RESX, 20});

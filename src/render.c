@@ -6,13 +6,13 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:19:08 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 18:11:58 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/13 20:11:22 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-static inline unsigned int	sample_color(int n)
+static inline unsigned int	eval_color(int n)
 {
 #if 0
 	const unsigned int	palette[] = {0x0, 0x000000FF, 0x0000FF00, 0x00FF0000};
@@ -45,8 +45,10 @@ static inline void	clear_alpha(t_img *img, size_t buf_size)
 static inline unsigned int	cmul(unsigned int color, double f)
 {
 	return (
-			(color & 0x
-		   );
+			((unsigned int)(color * f) & 0x00FF0000) |
+			((unsigned int)(color * f) & 0x0000FF00) |
+			((unsigned int)(color * f) & 0x000000FF)
+			);
 }
 #endif
 
@@ -76,11 +78,12 @@ void	render_colors(t_img *img, t_rect b)
 				set_pixel (img, x, y, 0x00FF0000);
 			else if ((n & 0xFF000000) == 0x02000000)
 				set_pixel (img, x, y,
-					sample_color (n) >> 1);
+					eval_color (n) >> 1
+				);
 			else
 #  endif
 			set_pixel (img, x, y,
-				sample_color(
+				eval_color (
 				//get_sample (img, x, y)
 				n
 				)
