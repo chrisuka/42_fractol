@@ -6,7 +6,7 @@
 #    By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/15 19:18:05 by ikarjala          #+#    #+#              #
-#    Updated: 2022/11/12 22:00:25 by ikarjala         ###   ########.fr        #
+#    Updated: 2022/11/14 20:15:06 by ikarjala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,22 +38,24 @@ CFLAGS		= -Wall -Werror -Wextra -O3
 CFSTRICT	= -Wimplicit -Wunused -Wconversion
 DBFLAGS		= -g -fsanitize=address
 
-#=== TARGETS ==================================================================
-.PHONY: all clean fclean re debug d db so strict W
+#=== TARGETS ==================================================================#
+.PHONY: all clean fclean re
+.PHONY: lclean so debug d strict W norme
 all: $(NAME)
-$(NAME): .buildinfo $(LIB_NAME) $(OBJ) Makefile $(INC_NAME)
+$(NAME): .buildinfo $(LIB_NAME) $(OBJ) Makefile
 	@$(ECHO) $(BMSG_LD)
 	@$(CC) -o $(BIN) $(LIBS) $(OBJ)
 	@$(ECHO) $(BMSG_FIN)
 
 $(OBJ): $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) -c $(CFLAGS) $(INCLUDE) $< -o $@
-	@$(ECHO)	" $(GREEN)$<$(CNIL)"
+	@$(CC) -c $(CFLAGS) $(INCLUDE) $(<) -o $(@)
+	@$(ECHO)	" $(GREEN)$(<)$(CNIL)"
 
 $(LIB_NAME):
-	@make -C $(dir $@) all
+	@make -C $(dir $@)	all
 
+#-- CLEANUP ---------------------------|----//--||
 clean:
 	@$(ECHO)	"Cleaning objects..."
 	@$(RM)		$(OBJ)
@@ -63,31 +65,36 @@ fclean: clean
 	@$(ECHO)	"Removing binaries..."
 	@$(RM) $(BIN) $(BIN:.a=.so)
 re: fclean all
-
-W: strict
-strict: CFLAGS += $(CFSTRICT)
+lclean:
+	@$(ECHO)	"Clearing libraries..."
+	@$(MAKE) -C	$(dir $(LIB_NAME))	fclean
+#-- UTILITY ---------------------------|----//--||
+W:		strict
 strict: BMSG_FORM := --STRICT--
+strict: CFLAGS += $(CFSTRICT)
 strict: re
 
-d: debug
-db: debug
-debug: CFLAGS += $(DBFLAGS)
+d:		debug
 debug: BMSG_FORM := --DEBUG--
+debug: CFLAGS += $(DBFLAGS)
 debug: re
 
-#=== UTILITY ==================================================================
-ECHO	:= echo
+#=== UTILITY ==================================================================#
+CMD_NORME	:= norminette -R CheckForbiddenSourceHeader
+ECHO		:= echo
 .buildinfo:
 	@$(ECHO)	$(BMSG_BIN)
 	@$(ECHO)	$(BMSG_CC)
 	@touch .buildinfo
+norme:
+	$(CMD_NORME) $(INC_DIR)*.h $(SRC)*.c
 
 BMSG_FORM	:= --DEPLOY--
 BMSG_BIN	= "$(BLUE)$(NAME) :: $(CYANB)Starting $(BMSG_FORM) build...$(CNIL)"
 BMSG_CC		= "$(BLUE)$(NAME) :: $(CNIL)$(CC) $(CFLAGS)"
 BMSG_LD		= "$(BLUE)$(NAME) :: $(PURPLEB)Linking: $(CNIL)$(LIBS)"
 BMSG_FIN	= "$(BLUE)$(NAME) :: $(GREENB)Build success!$(CNIL)"
-
+#=== COLORS ===================================================================#
 CNIL	:=\033[0;0m
 RED		:=\033[0;31m
 GREEN	:=\033[0;32m
@@ -95,14 +102,11 @@ GOLD	:=\033[0;33m
 BLUE	:=\033[0;34m
 PURPLE	:=\033[0;35m
 CYAN	:=\033[0;36m
-
-CYANB	:=\033[1;36m
-PURPLEB	:=\033[1;35m
+#-BOLD-|------------|
+REDB	:=\033[1;31m
 GREENB	:=\033[1;32m
-
-CMD_NORME	= norminette -R CheckForbiddenSourceHeader
-norme:
-	$(CMD_NORME) $(INC_DIR)*.h $(SRC)*.c
-run: $(NAME)
-	$(BIN) julia
-#==============================================================================
+GOLDB	:=\033[1;33m
+BLUEB	:=\033[1;34m
+PURPLEB	:=\033[1;35m
+CYANB	:=\033[1;36m
+#======|============|==========================================================#
