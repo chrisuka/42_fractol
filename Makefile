@@ -6,7 +6,7 @@
 #    By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/15 19:18:05 by ikarjala          #+#    #+#              #
-#    Updated: 2022/11/14 20:15:06 by ikarjala         ###   ########.fr        #
+#    Updated: 2022/11/14 20:25:36 by ikarjala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ LIBFT		= -L libft -lft
 MLX			= -L /usr/local/lib/ -lmlx -framework OpenGL -framework AppKit
 
 CC			:= clang
-CFLAGS		= -Wall -Werror -Wextra -O3
+CFLAGS		= -Wall -Werror -Wextra $(USEFLAGS)
 CFSTRICT	= -Wimplicit -Wunused -Wconversion
 DBFLAGS		= -g -fsanitize=address
 
