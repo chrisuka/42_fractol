@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 21:29:57 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/16 00:05:46 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,11 @@ int	on_keyup(int key, void *vars)
 	t_vars	*v;
 
 	v = (t_vars *)(vars);
+	if (key == KB_SPC)
+	{
+		v->fractal_type = (v->fractal_type + 1) % 4;
+		v->dirty = 1;
+	}
 	if (key == KB_ESC)
 		app_close (v, XC_EXIT);
 	return (0);
