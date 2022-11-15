@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 02:04:07 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/15 23:40:50 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/16 00:35:33 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static inline double	z_mandelbrot(t_cx z, t_cx c)
 
 static inline double	choose_z(t_cx z, t_cx c, int n)
 {
-	if (n == 2)
+	if (n == tricorn)
 		return (z_tricorn (z, c));
-	else if (n == 3)
+	else if (n == burning_ship)
 		return (z_burning_ship (z, c));
 	return (z_mandelbrot (z, c));
 }

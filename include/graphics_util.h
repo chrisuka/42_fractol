@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 21:27:26 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/13 20:41:32 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/16 00:35:56 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #  define CBGOLD	"\033[1;33m"
 # endif
 
-enum	gui_anchor {
+enum	e_gui_anchor {
 	anchor_cent = 0,
 	anchor_topl = 1,
 	anchor_topr = 2,
@@ -34,7 +34,8 @@ enum	gui_anchor {
 };
 
 /* GUI TEXT
- */
+*/
+
 # define GUI_CELL_W		10
 # define GUI_CELL_H		25
 

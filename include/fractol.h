@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/15 23:51:58 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/16 00:37:07 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@
 # define PAN_STEP	0.25L
 # define ZOOM_STEP	0.25L
 
-# define MAX_DEPTH		200 // MAX ITERATIONS PER COMPLEX FUNCTION
-# define PERIOD			20 // INTERVAL TO CHECK PERIODICITY
-# define SUBDIV_DEPTH	16 // MAX DEPTH TO RECURSE SUBDIVSIONS
-# define SUBD_RES		4 // IF SUBDIVISION RESOLUTION LESS THAN THIS, GOTO SIMPLE
+# define MAX_DEPTH		200
+# define PERIOD			20
+# define SUBDIV_DEPTH	16
+# define SUBD_RES		4
 
 # define XC_EXIT	0
 # define XC_ERROR	1
@@ -83,19 +83,22 @@ typedef struct s_vars_data_container {
 	int		max_samples;
 	int		lock_cursor : 1;
 	int		dirty : 1;
-	//int		debug : 1;
+	int		debug : 1;
 }	t_vars;
 
-enum	fractals {
-	julia_mc = 0
+enum	e_fractals {
+	julia_mc = 0,
+	mandelbrot = 1,
+	tricorn = 2,
+	burning_ship = 3
 };
 
-/*/ App Control ////////*/
+/*/ App Control //====================================/*/
 
 void	app_close(t_vars *v, int code);
 int		key_axis(int key, const int pval, const int nval);
 
-/*/ Events /////////////*/
+/*/ Events //=========================================/*/
 
 int		on_keydown(int key, void *vars);
 int		on_keyup(int key, void *vars);
@@ -103,33 +106,33 @@ int		on_mousedown(int key, int x, int y, void *vars);
 int		on_mousemove(int x, int y, void *vars);
 int		on_render(void *vars);
 
-/*/ Draw Utilities /////*/
+/*/ Draw Utilities //=================================/*/
 
 void	set_pixel(t_img *img, int x, int y, unsigned int color);
 void	buf_pixel(t_img *img, int n, unsigned int color);
 void	draw_rect(t_img *img, t_rect b, unsigned int color);
 
-/*/ Draw Manager ///////*/
+/*/ Draw Manager //===================================/*/
 
 void	draw_fractal_simple(t_vars *v, t_rect b);
 void	draw_fractal(t_vars *v, int depth, t_rect b);
 
-/*/ Sampler ////////////*/
+/*/ Sampler //========================================/*/
 
 void	sample_border(t_vars *v, t_rect b);
 int		sample_fractal(t_vars *v, int x, int y);
 int		sample_fractal_2(t_vars *v, int x, int y);
 int		get_sample(t_img *img, int x, int y);
 
-/*/ Render /////////////*/
+/*/ Render //=========================================/*/
 
 void	render_colors(t_img *img, t_rect b);
 
-/*/ Fractals ///////////*/
+/*/ Fractals //=======================================/*/
 
 int		julia(int zf_index, t_cx z, t_cx c);
 
-/*/ GUI ////////////////*/
+/*/ GUI //============================================/*/
 
 void	put_gui_static(t_vars *v, t_rect b);
 

@@ -6,13 +6,13 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/15 23:07:20 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/16 00:44:37 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-/* Return a copy of rect b with all sides inset (pushed inward) by px pixels
+/* Return a copy of rect b with all sides inset (pushed inward) by px pixels.
 */
 static inline t_rect	r_inset(t_rect b, const int px)
 {
@@ -21,6 +21,27 @@ static inline t_rect	r_inset(t_rect b, const int px)
 		.y = b.y + px,
 		.w = b.w - px * 2,
 		.h = b.h - px * 2,
+	});
+}
+
+/* Return the bounds of a horizontal or vertical division line for rect b.
+ * Will be either flat or thin, depending on the angle.
+ * For convenience with box checking algorithm, where we split and recurse.
+*/
+static inline t_rect	r_splitter(t_rect b, const int vertical)
+{
+	if (vertical)
+		return ((t_rect){
+			b.x + b.w,
+			b.y + 1,
+			1,
+			b.h - 2
+		});
+	return ((t_rect){
+		b.x + 1,
+		b.y + b.h,
+		b.w - 2,
+		1
 	});
 }
 
@@ -48,7 +69,7 @@ static inline int	border_equ(t_img *img, t_rect b, int base)
 }
 
 /* Brute-force method for evaluating a fractal estimate on each pixel within b
- */
+*/
 void	draw_fractal_simple(t_vars *v, t_rect b)
 {
 	const int	ex = b.x + b.w - 1;
@@ -79,25 +100,6 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 		}
 		//n += WIN_RESX - b.w;
 	}
-}
-
-/* Return the bounds of a horizontal or vertical division line for rect b.
-*/
-static inline t_rect	r_splitter(t_rect b, const int vertical)
-{
-	if (vertical)
-		return ((t_rect){
-			b.x + b.w,
-			b.y + 1,
-			1,
-			b.h - 2
-		});
-	return ((t_rect){
-		b.x + 1,
-		b.y + b.h,
-		b.w - 2,
-		1
-	});
 }
 
 /* Mariani-Silver algorithm (DIN approach)
