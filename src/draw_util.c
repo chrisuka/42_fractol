@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 19:59:31 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/11 19:19:44 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:28:52 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,15 @@ void	draw_rect(t_img *img, t_rect b, unsigned int color)
 	const int		ey = b.y + b.h - 1;
 	unsigned int	*pxi;
 
-	//pxi = (((unsigned int *)(img->addr)) + b.y * WIN_RESX + b.x);
+#if 0
+	pxi = (((unsigned int *)(img->addr)) + b.y * WIN_RESX + b.x);
+#else
 	pxi = (unsigned int *)(img->addr);
 	pxi += b.y * WIN_RESX + b.x;
+#endif
 	while (b.y <= ey)
 	{
-		bset (pxi, lcolor, (size_t)(rowsize));
+		ft_bset64 (pxi, lcolor, (size_t)(rowsize));
 		pxi += WIN_RESX;
 		b.y ++;
 	}

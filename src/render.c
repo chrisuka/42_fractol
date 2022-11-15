@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:19:08 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/13 22:59:01 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/14 21:03:51 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	render_colors(t_img *img, t_rect b)
 		x = b.x - 1;
 		while (++x < ex)
 		{
-#if 1
+#if 0
 			buf_pixel (img, n, eval_color (
 				((unsigned int *)(img->addr))[n]
 				//get_sample (img, x, y)

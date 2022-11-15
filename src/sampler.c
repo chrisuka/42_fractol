@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 19:09:17 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/13 22:09:00 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:41:19 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ int	sample_fractal_2	(t_vars *v, int x, int y)
 {
 	int	n;
 #  if JULIA
-	n = mandelbrot(
+	n = julia (v->fractal_type,
 		scale(x, y, v->view),
 		v->view.mouse_complex);
 #  else
-	n = mandelbrot(
+	n = julia (v->fractal_type,
 		(t_cx){0.0L, 0.0L},
 		scale(x, y, v->view));
 #  endif
@@ -68,11 +68,11 @@ int	sample_fractal(t_vars *v, int x, int y)
 	int	n;
 
 #  if JULIA
-	n = mandelbrot(
+	n = julia (v->fractal_type,
 		scale(x, y, v->view),
 		v->view.mouse_complex);
 #  else
-	n = mandelbrot(
+	n = julia (v->fractal_type,
 		(t_cx){0.0L, 0.0L},
 		scale(x, y, v->view));
 #  endif

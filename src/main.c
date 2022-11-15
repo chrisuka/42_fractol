@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/13 22:25:59 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:38:52 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static inline t_vars	instantiate_mlx(char *wname)
 		.mouse_complex = (t_cx){0.0L, 0.0L}},
 		.max_samples = 40,
 		.lock_cursor = 0,
+		.fractal_type = -1,
 		.dirty = 1
 	};
 	v.mlx_win = mlx_new_window(v.mlxo, WIN_RESX, WIN_RESY, wname);

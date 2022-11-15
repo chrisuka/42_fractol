@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 19:43:23 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:07:20 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 				(t_cx){0.0L, 0.0L},
 				scale (b.x, b.y, v->view)
 			)));	
-		n += WIN_RESX - b.w;
 #else
 	# if DEBUG
 			sample_fractal_2 (v, x, y);
@@ -78,11 +77,12 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 	# endif
 #endif
 		}
+		//n += WIN_RESX - b.w;
 	}
 }
 
 /* Return the bounds of a horizontal or vertical division line for rect b.
- */
+*/
 static inline t_rect	r_splitter(t_rect b, const int vertical)
 {
 	if (vertical)

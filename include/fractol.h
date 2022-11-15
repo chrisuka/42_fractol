@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/13 22:34:14 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:40:30 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	render_colors(t_img *img, t_rect b);
 
 /*/ Fractals ///////////*/
 
-int	mandelbrot(t_cx z, t_cx c);
+int		julia(int zf_index, t_cx z, t_cx c);
 
 /*/ GUI ////////////////*/
 
