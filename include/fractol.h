@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/15 23:40:30 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:51:58 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ typedef struct s_vars_data_container {
 	int		dirty : 1;
 	//int		debug : 1;
 }	t_vars;
+
+enum	fractals {
+	julia_mc = 0
+};
 
 /*/ App Control ////////*/
 

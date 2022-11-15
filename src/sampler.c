@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 19:09:17 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/15 23:41:19 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:53:55 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,18 @@ int	get_sample(t_img *img, int x, int y)
 	return (*pxi);
 }
 
-# define JULIA 0
 #if DEBUG
 int	sample_fractal_2	(t_vars *v, int x, int y)
 {
 	int	n;
-#  if JULIA
-	n = julia (v->fractal_type,
-		scale(x, y, v->view),
-		v->view.mouse_complex);
-#  else
-	n = julia (v->fractal_type,
-		(t_cx){0.0L, 0.0L},
-		scale(x, y, v->view));
-#  endif
+	if (v->fractal_type == julia_mc)
+		n = julia (v->fractal_type,
+			scale(x, y, v->view),
+			v->view.mouse_complex);
+	else
+		n = julia (v->fractal_type,
+			(t_cx){0.0L, 0.0L},
+			scale(x, y, v->view));
 	set_pixel (&v->img, x, y, (unsigned int)(n | 0x02000000));
 	return (n);
 }
@@ -67,15 +65,14 @@ int	sample_fractal(t_vars *v, int x, int y)
 {
 	int	n;
 
-#  if JULIA
-	n = julia (v->fractal_type,
-		scale(x, y, v->view),
-		v->view.mouse_complex);
-#  else
-	n = julia (v->fractal_type,
-		(t_cx){0.0L, 0.0L},
-		scale(x, y, v->view));
-#  endif
+	if (v->fractal_type == julia_mc)
+		n = julia (v->fractal_type,
+			scale (x, y, v->view),
+			v->view.mouse_complex);
+	else
+		n = julia (v->fractal_type,
+			(t_cx){0.0L, 0.0L},
+			scale (x, y, v->view));
 # if DEBUG
 	set_pixel (&v->img, x, y, (unsigned int)(n | 0x01000000));
 # else
