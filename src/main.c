@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/16 00:49:27 by ikarjala         ###   ########.fr       */
+/*   Updated: 2022/12/05 13:22:45 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static inline t_vars	instantiate_mlx(char *wname)
 	return (v);
 }
 
-#if 1
 static int	parse_arg(char *arg)
 {
 	const char	*ops[] = {"julia", "mandelbrot", "tricorn", "ship"};
@@ -67,7 +66,6 @@ static int	parse_arg(char *arg)
 	}
 	return (-1);
 }
-#endif
 
 int	main(int argc, char **argv)
 {

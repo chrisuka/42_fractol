@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 19:09:17 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/15 23:53:55 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/02 17:06:48 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,36 +30,11 @@ static inline t_cx	scale(int x, int y, t_vrect view)
 
 int	get_sample(t_img *img, int x, int y)
 {
-	unsigned int	*pxi;
+	const unsigned int	*pxi;
 
 	pxi = ((unsigned int *)(img->addr)) + y * WIN_RESX + x;
-# if DEBUG
-	if (x >= WIN_RESX || y >= WIN_RESY)
-		ft_putendl (CRED "pixel overflow!" CNIL);
-	// when we lookup a sample, if it's not marked as evaled, mark it as bad
-	if ((*pxi & 0xFF000000) == 0x02000000); // ignore 0x02 (brute-forced pixel)
-	else if ((*pxi & 0xFF000000) != 0x01000000)
-		*pxi |= 0xFF000000;
-# endif
 	return (*pxi);
 }
-
-#if DEBUG
-int	sample_fractal_2	(t_vars *v, int x, int y)
-{
-	int	n;
-	if (v->fractal_type == julia_mc)
-		n = julia (v->fractal_type,
-			scale(x, y, v->view),
-			v->view.mouse_complex);
-	else
-		n = julia (v->fractal_type,
-			(t_cx){0.0L, 0.0L},
-			scale(x, y, v->view));
-	set_pixel (&v->img, x, y, (unsigned int)(n | 0x02000000));
-	return (n);
-}
-#endif
 
 int	sample_fractal(t_vars *v, int x, int y)
 {
@@ -67,17 +42,16 @@ int	sample_fractal(t_vars *v, int x, int y)
 
 	if (v->fractal_type == julia_mc)
 		n = julia (v->fractal_type,
-			scale (x, y, v->view),
-			v->view.mouse_complex);
+				scale (x, y, v->view),
+				v->view.mouse_complex);
 	else
 		n = julia (v->fractal_type,
-			(t_cx){0.0L, 0.0L},
-			scale (x, y, v->view));
-# if DEBUG
-	set_pixel (&v->img, x, y, (unsigned int)(n | 0x01000000));
-# else
-	set_pixel (&v->img, x, y, (unsigned int)(n));
-# endif
+				(t_cx){0.0L, 0.0L},
+				scale (x, y, v->view));
+	if (v->debug)
+		set_pixel (&v->img, x, y, (unsigned int)(n | PX_GOOD));
+	else
+		set_pixel (&v->img, x, y, (unsigned int)(n));
 	return (n);
 }
 
@@ -88,7 +62,7 @@ void	sample_border(t_vars *v, t_rect b)
 	const int	thin = (b.w == 1);
 	const int	flat = (b.h == 1);
 	int			n;
-	
+
 	n = b.x - 1;
 	while (++n <= ex)
 	{
@@ -104,4 +78,3 @@ void	sample_border(t_vars *v, t_rect b)
 			sample_fractal (v, ex, n);
 	}
 }
-

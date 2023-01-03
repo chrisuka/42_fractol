@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   app_control.c                                      :+:      :+:    :+:   */
+/*   debug.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/16 20:41:16 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/12/05 19:23:55 by ikarjala         ###   ########.fr       */
+/*   Created: 2022/11/16 22:05:16 by ikarjala          #+#    #+#             */
+/*   Updated: 2022/12/05 19:22:27 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
+#ifndef DEBUG_H
+# define DEBUG_H
 
-void	app_close(t_vars *v, int code)
-{
-	if (v->mlxo)
-		mlx_destroy_window(v->mlxo, v->mlx_win);
-	v->mlxo = NULL;
-	v->mlx_win = NULL;
-	exit(code);
-}
+# define PX_RMASK	0xFF000000
+# define PX_GOOD	0x01000000
+# define PX_BRUTE	0x02000000
+# define PX_BAD		0xFF000000
 
-int	key_axis(int key, const int pval, const int nval)
-{
-	if (key == pval)
-		return (1);
-	if (key == nval)
-		return (-1);
-	return (0);
-}
+#endif

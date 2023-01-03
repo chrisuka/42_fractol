@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/16 00:37:07 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/02 17:27:16 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 # include "libft.h"
 # include "graphics_util.h"
 # include "keysym_macos.h"
-
-# define DEBUG 1//DEBUG
+# include "debug.h"
 
 # define BIN_NAME	"fractol"
 # define WIN_TITLE	"Fract'ol"
@@ -35,10 +34,6 @@
 
 # define XC_EXIT	0
 # define XC_ERROR	1
-
-# define ECONTINUE	0
-# define EEXIT		1
-# define EINTERNAL	2
 
 typedef struct s_tuple {
 	int	x;
@@ -121,7 +116,6 @@ void	draw_fractal(t_vars *v, int depth, t_rect b);
 
 void	sample_border(t_vars *v, t_rect b);
 int		sample_fractal(t_vars *v, int x, int y);
-int		sample_fractal_2(t_vars *v, int x, int y);
 int		get_sample(t_img *img, int x, int y);
 
 /*/ Render //=========================================/*/
@@ -135,5 +129,10 @@ int		julia(int zf_index, t_cx z, t_cx c);
 /*/ GUI //============================================/*/
 
 void	put_gui_static(t_vars *v, t_rect b);
+
+/*/ Debug //==========================================/*/
+
+int	debug_get_sample(t_img *img, int x, int y);
+int	debug_sample_fractal(t_vars *v, int x, int y);
 
 #endif

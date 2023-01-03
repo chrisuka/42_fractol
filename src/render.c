@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:19:08 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/14 21:03:51 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 13:41:02 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,8 @@ void	render_colors(t_img *img, t_rect b)
 		x = b.x - 1;
 		while (++x < ex)
 		{
-#if 0
-			buf_pixel (img, n, eval_color (
-				((unsigned int *)(img->addr))[n]
-				//get_sample (img, x, y)
-			));
-			++n;
-#else
 			n = get_sample (img, x, y);
-#  if DEBUG
+#  if 1 //DEBUG
 			if ((n & 0xFF000000) == 0xFF000000)
 				set_pixel (img, x, y, 0x00FF0000);
 			else if ((n & 0xFF000000) == 0x02000000)
@@ -89,7 +82,6 @@ void	render_colors(t_img *img, t_rect b)
 				n
 				)
 			);
-#endif
 		}
 		n += WIN_RESX - b.w;
 	}

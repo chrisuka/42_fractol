@@ -6,7 +6,7 @@
 #    By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/15 19:18:05 by ikarjala          #+#    #+#              #
-#    Updated: 2022/11/14 20:25:36 by ikarjala         ###   ########.fr        #
+#    Updated: 2023/01/02 17:07:51 by ikarjala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME	:= fractol
 BIN		= $(ROOT)$(NAME)
 
 CFUNC	=\
-main events app_control draw_util draw_man render sampler fractals gui
+main events app_control draw_util draw_man render sampler fractals gui debug
 
 SRC_DIR		= $(ROOT)src/
 OBJ_DIR		= $(ROOT)obj/

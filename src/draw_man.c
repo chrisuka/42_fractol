@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/16 00:44:37 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/02 14:37:10 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,27 +76,17 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 	const int	ey = b.y + b.h - 1;
 	int			x;
 	int			y;
-	//int		n;
 
-	//n = b.y * WIN_RESX + b.x - 1;
 	y = b.y - 1;
 	while (++y <= ey)
 	{
 		x = b.x - 1;
 		while (++x <= ex)
 		{
-#if 0
-			buf_pixel (&v->img, ++n, sample_color(mandelbrot(
-				(t_cx){0.0L, 0.0L},
-				scale (b.x, b.y, v->view)
-			)));	
-#else
-	# if DEBUG
-			sample_fractal_2 (v, x, y);
-	# else
-			sample_fractal (v, x, y);
-	# endif
-#endif
+			if (v->debug)
+				debug_sample_fractal (v, x, y);
+			else
+				sample_fractal (v, x, y);
 		}
 		//n += WIN_RESX - b.w;
 	}
