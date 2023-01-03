@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 17:40:08 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:07:12 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,8 @@ int		julia(int zf_index, t_cx z, t_cx c);
 
 /*/ GUI //============================================/*/
 
-void	put_gui_static(t_vars *v, t_rect b);
+void	put_gui_bg(t_vars *v, t_rect b);
+void	put_gui_static_text(t_vars *v, t_rect b);
 
 /*/ Debug //==========================================/*/
 

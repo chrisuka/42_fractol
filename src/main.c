@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 17:38:18 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:09:54 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	main(int argc, char **argv)
 	v = instantiate_mlx(WIN_TITLE);
 	v.fractal_type = fractal_type;
 	add_hooks (&v);
+	put_gui_bg (&v, (t_rect){0, 0, WIN_RESX, GUI_CELL_H});
 	mlx_loop (v.mlxo);
 	return (XC_EXIT);
 }

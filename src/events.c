@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 17:35:58 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:06:46 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,6 @@ int	on_render(void *vars)
 		draw_fractal (v, 0, screen);
 	render_colors (&v->img, screen, v->debug);
 	mlx_put_image_to_window (v->mlxo, v->mlx_win, v->img.o, 0, 0);
-	put_gui_static (v, (t_rect){0, 0, WIN_RESX, GUI_CELL_H});
+	put_gui_static_text (v, (t_rect){0, 0, WIN_RESX, GUI_CELL_H});
 	return (0);
 }
