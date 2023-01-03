@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 18:06:46 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:37:05 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	on_mousedown(int key, int x, int y, void *vars)
 	t_cx	mscale;
 
 	v = (t_vars *)(vars);
-	v->view.zoom *= 1 + key_axis (key, M_SCROLL_U, M_SCROLL_D) * ZOOM_STEP;
+	v->view.zoom *= (double)(1.0L + key_axis
+			(key, M_SCROLL_U, M_SCROLL_D) * ZOOM_STEP);
 	if (v->view.zoom > 2.0L || v->view.zoom <= 0.0L)
 		v->view.zoom = 2.0L;
 	v->lock_cursor |= (key == M_BUTTON_L);
@@ -47,10 +48,11 @@ int	on_keydown(int key, void *vars)
 	t_vars	*v;
 
 	v = (t_vars *)(vars);
-	v->view.x += key_axis (key, ARROW_RIGHT, ARROW_LEFT)
-		* PAN_STEP * v->view.zoom;
-	v->view.y -= key_axis (key, ARROW_UP, ARROW_DOWN) * PAN_STEP * v->view.zoom;
-	v->view.zoom *= 1 - key_axis (key, KB_I, KB_O) * ZOOM_STEP;
+	v->view.x += (double)(key_axis (key, ARROW_RIGHT, ARROW_LEFT)
+			* PAN_STEP * v->view.zoom);
+	v->view.y -= (double)(key_axis (key, ARROW_UP, ARROW_DOWN)
+			* PAN_STEP * v->view.zoom);
+	v->view.zoom *= (double)(1.0L - key_axis (key, KB_I, KB_O) * ZOOM_STEP);
 	if (v->view.zoom > 2.0L || v->view.zoom <= 0.0L)
 		v->view.zoom = 2.0L;
 	if (key == KB_R)

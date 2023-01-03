@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 16:35:14 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:32:16 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 	if (depth == 0)
 		sample_border (v, b);
 	if (border_equ (&v->img, b, *o_px))
-		return (draw_rect (&v->img, r_inset (b, 1), *o_px));
+		return (draw_rect (&v->img, r_inset (b, 1), (unsigned int)(*o_px)));
 	if (depth >= SUBDIV_DEPTH || (b.w <= SUBD_RES && b.h <= SUBD_RES))
 		return (draw_fractal_simple (v, r_inset (b, 1)));
 	b.w >>= split_v;

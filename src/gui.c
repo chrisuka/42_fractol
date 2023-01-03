@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 19:47:58 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 18:07:58 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:35:57 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ static inline char	*get_str(void)
 void	put_gui_static_text(t_vars *v, t_rect b)
 {
 	const unsigned int	color = 0x00FFFFFF;
-	const unsigned int	pad = 0;
 
 	mlx_string_put (v->mlxo, v->mlx_win,
-		b.x + pad, b.y + pad, color, get_str());
+		b.x, b.y, color, get_str());
 }

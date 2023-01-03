@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:02:39 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 17:07:40 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:36:39 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
  */
 static inline t_cx	scale(int x, int y, t_vrect view)
 {
-	const double	w = (double)ft_min(WIN_RESX, WIN_RESY) * 0.5L;
-	const double	amp = 0.01L;
+	const double	w = (double)(ft_min(WIN_RESX, WIN_RESY) * 0.5L);
+	const double	amp = (double)(0.01L);
 
 	return ((t_cx){
 		.x = (double)(x - w) *amp * view.zoom + view.x,
@@ -49,7 +49,7 @@ int	debug_get_sample(t_img *img, int x, int y)
 		;
 	else if ((*pxi & PX_RMASK) != PX_GOOD)
 		*pxi |= PX_BAD;
-	return (*pxi);
+	return ((int)(*pxi));
 }
 
 /* Debug mode version of sample_fractal.

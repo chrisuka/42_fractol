@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:19:08 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 17:06:40 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 18:34:31 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 static inline unsigned int	eval_color(int n)
 {
-	return (
+	return ((unsigned int)
 		(n * 5 | (n * 10) << 8 | (n * 20) << 16)
 		& ~PX_RMASK);
 }
 
 static inline unsigned int	debug_eval_color(int n)
 {
-	const int	meta = n & PX_RMASK;
+	const int	meta = n & (int)PX_RMASK;
 
 	if (meta == (int)PX_BAD)
 		return (0x00FF0000);
