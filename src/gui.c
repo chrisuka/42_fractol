@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 19:47:58 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/11/12 21:08:53 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 16:33:04 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 static inline char	*get_str(void)
 {
-	#define DELIM " | "
-	//const char	del[] = "//";
-
-	return ("[ESC]:quit" DELIM
-			"[R]eset" DELIM
-			"[<^v>]:move" DELIM
-			"zoom [I]n/[O]ut"
-			);
+	return (
+		"[ESC]:quit "
+		"[R]eset "
+		"[D]ebug mode" " | "
+		"[<^v>]:move" " | "
+		"zoom [I]n/[O]ut" " | "
+		"[SPC]:cycle fractal"
+	);
 }
 
 void	put_gui_static(t_vars *v, t_rect b)
@@ -31,5 +31,6 @@ void	put_gui_static(t_vars *v, t_rect b)
 	const unsigned int	pad = 0;
 
 	draw_rect (&v->img, b, bgcolor);
-	mlx_string_put (v->mlxo, v->mlx_win, b.x + pad, b.y + pad, fgcolor, get_str());
+	mlx_string_put (v->mlxo, v->mlx_win,
+		b.x + pad, b.y + pad, fgcolor, get_str());
 }

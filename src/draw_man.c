@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/02 14:37:10 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 16:10:53 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
  * Recursion sides A and B should both use the same dividing line and borders
  * which saves us further processing time.
  *
- * To prevent stack overflow, there is a depth limit after which we
+ * To prevent overflow and other issues, there is a depth limit after which we
  * use simple xy iteration to sample the remaining area.
  * 
  * All new sample areas are inset so we never calculate the same pixel twice.
