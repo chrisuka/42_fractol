@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:59:46 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 16:10:53 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 16:35:14 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	draw_fractal_simple(t_vars *v, t_rect b)
 			else
 				sample_fractal (v, x, y);
 		}
-		//n += WIN_RESX - b.w;
 	}
 }
 
@@ -121,10 +120,8 @@ void	draw_fractal(t_vars *v, int depth, t_rect b)
 	b.w >>= split_v;
 	b.h >>= !split_v;
 	sample_border (v, r_splitter (b, split_v));
-
 	draw_fractal (v, depth + 1, (t_rect){
 		b.x, b.y, b.w + split_v, b.h + !split_v});
-
 	draw_fractal (v, depth + 1, (t_rect){
 		b.x + (b.w * split_v), b.y + (b.h * !split_v),
 		b.w + (w_odd && split_v), b.h + (h_odd && !split_v)});

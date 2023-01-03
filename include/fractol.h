@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:37:15 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/02 17:27:16 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 17:40:08 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ enum	e_fractals {
 
 void	app_close(t_vars *v, int code);
 int		key_axis(int key, const int pval, const int nval);
+t_cx	mouse_scale(int x, int y, t_vrect view);
 
 /*/ Events //=========================================/*/
 
@@ -120,7 +121,7 @@ int		get_sample(t_img *img, int x, int y);
 
 /*/ Render //=========================================/*/
 
-void	render_colors(t_img *img, t_rect b);
+void	render_colors(t_img *img, t_rect b, int debug);
 
 /*/ Fractals //=======================================/*/
 
@@ -132,7 +133,7 @@ void	put_gui_static(t_vars *v, t_rect b);
 
 /*/ Debug //==========================================/*/
 
-int	debug_get_sample(t_img *img, int x, int y);
-int	debug_sample_fractal(t_vars *v, int x, int y);
+int		debug_get_sample(t_img *img, int x, int y);
+int		debug_sample_fractal(t_vars *v, int x, int y);
 
 #endif

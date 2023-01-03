@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:19:08 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 13:41:02 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 17:06:40 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,77 +14,43 @@
 
 static inline unsigned int	eval_color(int n)
 {
-#if 0
-	const unsigned int	palette[] = {0x0, 0x000000FF, 0x0000FF00, 0x00FF0000};
-
-	return (palette[n % (sizeof(palette) / sizeof(int))]);
-#else
-		return (
-# if 0
-			(n * 5 | (n * 10) << 8 | (n * 20) << 16)
-# else
-			(n * 5 | (n * 10) << 8 | (n * 20) << 16)
-# endif
-			& 0x00FFFFFF);
-#endif
-}
-
-#if 0
-static inline void	clear_alpha(t_img *img, size_t buf_size)
-{
-	const unsigned int	mask = (0xFF000000);
-	unsigned int		*px;
-
-	px = (unsigned int *)(img->addr);
-	while (buf_size--)
-		img->addr[buf_size] &= ~mask;
-}
-#endif
-
-#if 0
-static inline unsigned int	cmul(unsigned int color, double f)
-{
 	return (
-			((unsigned int)(color * f) & 0x00FF0000) |
-			((unsigned int)(color * f) & 0x0000FF00) |
-			((unsigned int)(color * f) & 0x000000FF)
-			);
+		(n * 5 | (n * 10) << 8 | (n * 20) << 16)
+		& ~PX_RMASK);
 }
-#endif
 
-void	render_colors(t_img *img, t_rect b)
+static inline unsigned int	debug_eval_color(int n)
 {
-	const int	ex = b.x + b.w;
-	const int	ey = b.y + b.h;
-	int	x;
-	int	y;
-	int	n = b.y * WIN_RESX + b.x; //DEBUG
+	const int	meta = n & PX_RMASK;
 
+	if (meta == (int)PX_BAD)
+		return (0x00FF0000);
+	else if (meta == (int)PX_BRUTE)
+		return (eval_color (n) >> 1);
+	return (eval_color (n));
+}
+
+void	render_colors(t_img *img, t_rect b, int debug)
+{
+	unsigned int	(*f)(int);
+	const int		ex = b.x + b.w;
+	const int		ey = b.y + b.h;
+	int				x;
+	int				y;
+
+	if (debug)
+		f = &debug_eval_color;
+	else
+		f = &eval_color;
 	y = b.y - 1;
 	while (++y < ey)
 	{
 		x = b.x - 1;
 		while (++x < ex)
 		{
-			n = get_sample (img, x, y);
-#  if 1 //DEBUG
-			if ((n & 0xFF000000) == 0xFF000000)
-				set_pixel (img, x, y, 0x00FF0000);
-			else if ((n & 0xFF000000) == 0x02000000)
-				set_pixel (img, x, y,
-					eval_color (n) >> 1
+			set_pixel (img, x, y, f (
+					get_sample (img, x, y))
 				);
-			else
-#  endif
-			set_pixel (img, x, y,
-				eval_color (
-				//get_sample (img, x, y)
-				n
-				)
-			);
 		}
-		n += WIN_RESX - b.w;
 	}
-	//clear_alpha (img, WIN_RESX * WIN_RESY);
 }
-

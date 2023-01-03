@@ -6,7 +6,7 @@
 /*   By: ikarjala <ikarjala@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 20:55:03 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/12/05 13:22:45 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 17:38:18 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	parse_arg(char *arg)
 {
 	const char	*ops[] = {"julia", "mandelbrot", "tricorn", "ship"};
 	int			n;
-	
+
 	n = -1;
 	while (++n < (int)(sizeof(ops) / sizeof(ops[0])))
 	{
@@ -79,11 +79,7 @@ int	main(int argc, char **argv)
 		return (print_usage());
 	v = instantiate_mlx(WIN_TITLE);
 	v.fractal_type = fractal_type;
-
 	add_hooks (&v);
-
-//	put_gui_static (&v, (t_rect){0, 0, WIN_RESX, 20});
-
 	mlx_loop (v.mlxo);
 	return (XC_EXIT);
 }

@@ -6,7 +6,7 @@
 #    By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/15 19:18:05 by ikarjala          #+#    #+#              #
-#    Updated: 2023/01/02 17:07:51 by ikarjala         ###   ########.fr        #
+#    Updated: 2023/01/03 17:46:57 by ikarjala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ CC			:= clang
 CFLAGS		= -Wall -Werror -Wextra $(USEFLAGS)
 CFSTRICT	= -Wimplicit -Wunused -Wconversion
 DBFLAGS		= -g -fsanitize=address
+OFLAGS		= -O3 -flto=full
 
 #=== TARGETS ==================================================================#
 .PHONY: all clean fclean re
@@ -78,6 +79,11 @@ d:		debug
 debug: BMSG_FORM := --DEBUG--
 debug: CFLAGS += $(DBFLAGS)
 debug: re
+
+O:		fast
+fast: BMSG_FORM := --FAST--
+fast: CFLAGS += $(OFLAGS)
+fast: re
 
 #=== UTILITY ==================================================================#
 CMD_NORME	:= norminette -R CheckForbiddenSourceHeader

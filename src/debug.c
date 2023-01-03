@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:02:39 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 13:18:05 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 17:07:40 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static inline t_cx	scale(int x, int y, t_vrect view)
 	const double	amp = 0.01L;
 
 	return ((t_cx){
-		.x = (double)(x - w) * amp * view.zoom + view.x,
-		.y = (double)(y - w) * amp * view.zoom + view.y});
+		.x = (double)(x - w) *amp * view.zoom + view.x,
+		.y = (double)(y - w) *amp * view.zoom + view.y});
 }
 
 /* Debug mode version of get_sample.
@@ -65,13 +65,12 @@ int	debug_sample_fractal(t_vars *v, int x, int y)
 
 	if (v->fractal_type == julia_mc)
 		n = julia (v->fractal_type,
-			scale(x, y, v->view),
-			v->view.mouse_complex);
+				scale(x, y, v->view),
+				v->view.mouse_complex);
 	else
 		n = julia (v->fractal_type,
-			(t_cx){0.0L, 0.0L},
-			scale(x, y, v->view));
+				(t_cx){0.0L, 0.0L},
+				scale(x, y, v->view));
 	set_pixel (&v->img, x, y, (unsigned int)(n | PX_BRUTE));
 	return (n);
 }
-

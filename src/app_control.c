@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/16 20:41:16 by ikarjala          #+#    #+#             */
-/*   Updated: 2022/12/05 19:23:55 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/03 17:37:53 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,14 @@ int	key_axis(int key, const int pval, const int nval)
 	if (key == nval)
 		return (-1);
 	return (0);
+}
+
+t_cx	mouse_scale(int x, int y, t_vrect view)
+{
+	const double	w = ft_min(WIN_RESX, WIN_RESY) * 0.5L;
+	const double	amp = 0.01L;
+
+	return ((t_cx){
+		.x = (double)(x - w) *amp * view.zoom + view.x,
+		.y = (double)(y - w) *amp * view.zoom + view.y});
 }
