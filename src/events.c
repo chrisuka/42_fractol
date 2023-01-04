@@ -6,7 +6,7 @@
 /*   By: ikarjala <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:29:01 by ikarjala          #+#    #+#             */
-/*   Updated: 2023/01/03 18:37:05 by ikarjala         ###   ########.fr       */
+/*   Updated: 2023/01/04 13:00:54 by ikarjala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	on_render(void *vars)
 	if (!v->dirty)
 		return (0);
 	v->dirty = 0;
-	if (v->view.zoom >= 0.5L)
+	if (v->view.zoom >= 0.3L)
 		draw_fractal_simple (v, screen);
 	else
 		draw_fractal (v, 0, screen);
