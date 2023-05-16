@@ -16,3 +16,8 @@
 !libft
 !libft/
 !libft/**
+
+!README.md
+!resources/
+!resources/pics/
+!resources/pics/*
